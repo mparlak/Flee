@@ -1,0 +1,17 @@
+' Tests for simple calc engine
+' Format: ([result expression name]=[result expression value])+;([expression name]:[expression text]?[variables])+
+' Simple expressions
+c=300;a:100|b:200|c:a+b
+'	referencing same expression more than once
+c=300;a:100|c:a+a+a
+'	with variables
+c=300;a:var1?var1=100|b:var1?var1=200|c:a+b
+c=10;a:var1?var1=abc|b:var1?var1=string2|c:a.length + b.length
+'	variables in last expression
+c=400;a:var1?var1=100|b:var1?var1=200|c:a+b+var1?var1=100
+'	with functions
+c=400;a:-100|c:abs(a) + abs(a) + abs(b)?b=200
+'		with namespace
+c=400;a:-100|c:abs(a) + math.abs(a) + abs(b)?b=200
+'	more complicated
+c=500;a:max(var1, var2) * 2?var1=100&var2=200|b:var1.toString().length + 2?var1=abc|c:max(a, b) + var1?var1=100

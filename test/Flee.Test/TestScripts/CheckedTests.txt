@@ -1,0 +1,158 @@
+' Tests for checked arithmetic
+' Format is: expression;checked;should overflow
+' Addition
+'	signed
+int.maxvalue + 1;true;true
+int.minvalue + -1;true;true
+int.maxvalue + int.maxvalue;true;true
+int.maxvalue + 1;false;false
+int.minvalue + -1;false;false
+int.maxvalue + int.maxvalue;false;false
+'	long
+long.maxvalue + 1L;true;true
+long.minvalue + -1L;true;true
+long.maxvalue + long.maxvalue;true;true
+long.maxvalue + 1L;false;false
+long.minvalue + -1L;false;false
+long.maxvalue + long.maxvalue;false;false
+'	unsigned
+uint.maxvalue + 1U;false;false
+uint.maxvalue + 1U;true;true
+2147483647U + 1U;true;false
+ulong.maxvalue + 1UL;false;false
+ulong.maxvalue + 1LU;true;true
+9223372036854775807LU + 1LU;true;false
+' Subtraction
+'	signed
+int.minvalue - 1;false;false
+int.minvalue - 1;true;true
+int.maxvalue - -1;false;false
+int.maxvalue - -1;true;true
+long.minvalue - 1;false;false
+long.minvalue - 1;true;true
+long.maxvalue - -1;false;false
+long.maxvalue - -1;true;true
+'	unsigned
+0U - 1U;false;false
+0U - 1U;true;true
+0LU - 1LU;false;false
+0LU - 1LU;true;true
+' Multiplication
+'	signed
+int.maxvalue * 2;false;false
+int.maxvalue * 2;true;true
+int.minvalue * 2;false;false
+int.minvalue * 2;true;true
+long.maxvalue * 2;false;false
+long.maxvalue * 2;true;true
+long.minvalue * 2;false;false
+long.minvalue * 2;true;true
+'	unsigned
+uint.maxvalue * uint.maxvalue;false;false
+uint.maxvalue * uint.maxvalue;true;true
+2000000000U * 2U;true;false
+ulong.maxvalue * ulong.maxvalue;false;false
+ulong.maxvalue * ulong.maxvalue;true;true
+9000000000000000000LU * 2LU;true;false
+' Float..checked should do nothing
+single.maxvalue + 1;true;false
+single.minvalue - 1;true;false
+single.maxvalue * 2;true;false
+double.maxvalue + 1;true;false
+double.minvalue - 1;true;false
+double.maxvalue * 2;true;false
+' Conversions
+'	Byte
+cast(-1,byte);true;true
+cast(-1,byte);false;false
+cast(100,byte);true;false
+cast(100U,byte);true;false
+cast(1000,byte);true;true
+cast(1000U,byte);true;true
+'	Sbyte
+cast(-1,sbyte);true;false
+cast(-1,sbyte);false;false
+cast(100,sbyte);true;false
+cast(100U,sbyte);true;false
+cast(1000,sbyte);true;true
+cast(1000U,sbyte);true;true
+'	Short
+cast(-1,short);true;false
+cast(-1,short);false;false
+cast(100, short);true;false
+cast(100U,short);true;false
+cast(1000,short);true;false
+cast(1000U,short);true;false
+cast(80000,short);true;true
+cast(80000U,short);true;true
+'	UShort
+cast(-1,ushort);true;true
+cast(-1,ushort);false;false
+cast(100,ushort);true;false
+cast(100U,ushort);true;false
+cast(1000,ushort);true;false
+cast(1000U,ushort);true;false
+cast(80000,ushort);true;true
+cast(80000U,ushort);true;true
+'	Int
+cast(-1L,int);true;false
+cast(-1L,int);false;false
+cast(100L, int);true;false
+cast(100U,int);true;false
+cast(1000L,int);true;false
+cast(1000U,int);true;false
+cast(80000L,int);true;false
+cast(80000U,int);true;false
+cast(long.maxvalue,int);false;false
+cast(long.maxvalue,int);true;true
+cast(ulong.maxvalue,int);false;false
+cast(ulong.maxvalue,int);true;true
+'	Uint
+cast(-1,uint);true;true
+cast(-1,uint);false;false
+cast(100,uint);true;false
+cast(100U,uint);true;false
+cast(1000,uint);true;false
+cast(1000U,uint);true;false
+cast(80000,uint);true;false
+cast(80000U,uint);true;false
+cast(long.minvalue,uint);true;true
+cast(long.maxvalue,uint);true;true
+cast(ulong.minvalue,uint);true;false
+cast(ulong.maxvalue,uint);true;true
+'	Long
+cast(9223372036854775808LU, long);true;true
+cast(9223372036854775807LU, long);true;false
+cast(0UL, long);true;false
+'	Ulong
+cast(long.minvalue, ulong);true;true
+cast(long.maxvalue, ulong);true;false
+'	With reals
+cast(double.maxvalue, byte);true;true
+cast(double.maxvalue, sbyte);true;true
+cast(double.maxvalue, short);true;true
+cast(double.maxvalue, ushort);true;true
+cast(double.maxvalue, int);true;true
+cast(double.maxvalue, uint);true;true
+cast(double.maxvalue, long);true;true
+cast(double.maxvalue, ulong);true;true
+cast(1.45, byte);true;false
+cast(-100.0, byte);true;true
+cast(-1.0,sbyte);true;false
+cast(-1.0,int);true;false
+cast(1000.0,byte);true;true
+cast(80000.25,short);true;true
+cast(80000.25,ushort);true;true
+cast(-1.45, ushort);true;true
+cast(2147483647.0,int);true;false
+cast(2147483648.0,int);true;true
+cast(4294967295.0,uint);true;false
+cast(4294967296.0,uint);true;true
+cast(-1.25, uint);true;true
+cast(9.0E+18, long);true;false
+cast(9.0E+19, long);true;true
+cast(-1.25,long);true;false
+cast(9.2233720368547758E+18, ulong);true;false
+cast(1.8e+19, ulong);true;false
+cast(9.8e+19, ulong);true;true
+cast(-1.25, ulong);true;true

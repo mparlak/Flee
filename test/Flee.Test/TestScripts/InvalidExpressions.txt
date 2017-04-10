@@ -1,0 +1,335 @@
+' Expressions that should generate a compile exception
+' Int32 overflow
+System.Int32;2147483648;ConstantOverflow
+System.Int32;2147483649;ConstantOverflow
+System.Int32;400000000000;ConstantOverflow
+System.Int32;-2147483649;ConstantOverflow
+System.Int32;-3000000000;ConstantOverflow
+' Double overflow
+System.Object;1.34E+400;ConstantOverflow
+System.Double;-1.7976931348623157E+309;ConstantOverflow
+System.Double;1.7976931348623157E+309;ConstantOverflow
+System.Double;-1.8976931348623157E+308;ConstantOverflow
+System.Double;1.8976931348623157E+308;ConstantOverflow
+' Single overflow
+System.Single;1.234e+100f;ConstantOverflow
+System.Single;-1.234e+100f;ConstantOverflow
+' Uint32 overflow
+System.uint32;4294967296U;ConstantOverflow
+System.uint32;10000000000U;ConstantOverflow
+' Int64 overflow
+System.int64;9223372036854775808L;ConstantOverflow
+System.int64;-9223372036854775809L;ConstantOverflow
+System.int64;10000000000000000000L;ConstantOverflow
+System.int64;-10000000000000000000L;ConstantOverflow
+' Uint64 overflow
+System.uint64;18446744073709551616LU;ConstantOverflow
+System.uint64;28446744073709551616LU;ConstantOverflow
+'	without suffix
+System.uint64;28446744073709551616;ConstantOverflow
+'	with object return type
+System.object;28446744073709551616;ConstantOverflow
+' Arithmetic with invalid types
+System.Object;True+True;TypeMismatch
+System.Object;"abc" - "def";TypeMismatch
+System.Object;1 - True;TypeMismatch
+System.Object;1 + True;TypeMismatch
+System.Object;1 * "abc";TypeMismatch
+System.Object;2.3 / False;TypeMismatch
+System.Object;true * "abc";TypeMismatch
+System.Object;1 + (True - 100);TypeMismatch
+System.Object;"abc" * (1 + 2);TypeMismatch
+System.Object;true ^ 4;TypeMismatch
+System.Object;4 ^ "a";TypeMismatch
+System.Object;"a" ^ "b";TypeMismatch
+System.Object;"a" % 4;TypeMismatch
+System.Object;4 % true;TypeMismatch
+System.Object;true % "abc";TypeMismatch
+'	uint32
+System.object;100U + true;TypeMismatch
+System.object;100U * true;TypeMismatch
+System.object;100U ^ "a";TypeMismatch
+'	int64
+System.object;100L + true;TypeMismatch
+System.object;true / 100L;TypeMismatch
+System.object;100L ^ "a";TypeMismatch
+'	int64 and uint64
+System.object;100UL + 200L;TypeMismatch
+'	int32 and uint64
+system.object;100 + 200UL;TypeMismatch
+'	invalid negates
+System.object;-uint64.maxvalue;TypeMismatch
+' Invalid comparisons
+System.Object;1 > "abc";TypeMismatch
+System.Object;true < 1;TypeMismatch
+System.Object;true = 1;TypeMismatch
+System.Object;true >= false;TypeMismatch
+System.Object;true < false;TypeMismatch
+System.Object;true > false;TypeMismatch
+System.Object;true <= false;TypeMismatch
+System.Object;true > "abc";TypeMismatch
+System.Object;"abc" = 1;TypeMismatch
+System.Object;"abc" > true;TypeMismatch
+System.Object;"abc" <> 1;TypeMismatch
+System.Object;"abc" > "def";TypeMismatch
+System.Object;"abc" < "def";TypeMismatch
+System.Object;"" >= "a";TypeMismatch
+System.Object;"a" <= "def";TypeMismatch
+System.object;DayOfWeek.Friday = 5;TypeMismatch
+System.object;DayOfWeek.Friday > 1;TypeMismatch
+'	uint32
+System.object;130000U > true;TypeMismatch
+System.object;130000U = "a";TypeMismatch
+'	Int64
+System.object;130000L > true;TypeMismatch
+System.object;-1L = "a";TypeMismatch
+'	64 bit signed/unsigned
+System.object;100L > 200UL;TypeMismatch
+System.object;uint64.minvalue = int64.minvalue;TypeMismatch
+'	chained
+System.Object;1 > 2 > 3;TypeMismatch
+' mismatched types - and/or/xor
+System.Object;true and 1;TypeMismatch
+System.Object;false or 2;TypeMismatch
+System.Object;false XOR 3.1;TypeMismatch
+System.Object;false or "a";TypeMismatch
+System.Object;"abc" and "def";TypeMismatch
+System.Object;1.2 and 3.4;TypeMismatch
+System.object;234.56 and 1;TypeMismatch
+system.object;true and 1 or 2;TypeMismatch
+system.object;1 and (true or false);TypeMismatch
+system.object;1 and 2 and true;TypeMismatch
+system.object;true or false or 1;TypeMismatch
+'	..chained
+System.Object;true and false and 1;TypeMismatch
+System.Object;true or false or 2;TypeMismatch
+System.Object;1 and 2 and false;TypeMismatch
+System.Object;1 or 2 or "ab";TypeMismatch
+System.Object;1 xor 2 xor false;TypeMismatch
+' Result type not convertible expression type
+System.String;100;TypeMismatch
+System.String;true;TypeMismatch
+System.String;13.45;TypeMismatch
+System.boolean;100;TypeMismatch
+System.boolean;"abc";TypeMismatch
+System.boolean;-123.456;TypeMismatch
+System.int32;"a";TypeMismatch
+System.int32;true;TypeMismatch
+System.int32;800.34;TypeMismatch
+System.int32;2.0^4;TypeMismatch
+System.int32;2^4.0;TypeMismatch
+System.Double;"abc";TypeMismatch
+System.Double;1 > 100;TypeMismatch
+System.String;TypeA;TypeMismatch
+'	enum
+System.int32;DayOfWeek.Friday;TypeMismatch
+System.DayOfWeek;5;TypeMismatch
+' Members
+'	Non-existant members
+System.object;FakeField + 1;UndefinedName
+System.object;FakeField.AnotherField = true;UndefinedName
+System.object;TypeA.basename.nonfield + 1;UndefinedName
+System.object;string.fakefield + "abc";UndefinedName
+System.object;string.empty.stuff;UndefinedName
+'	Type access
+System.object;String;TypeMismatch
+'	Static member access through instance member
+System.object;StringA.Empty;TypeMismatch
+System.object;StringA.Length.MaxValue;TypeMismatch
+'	Instance member access through static member
+system.object;string.length;TypeMismatch
+System.object;TypeA.name.empty;TypeMismatch
+'	Access of non-public member on non-owner
+System.object;string.alignConst;TypeMismatch
+' Member chain gives wrong result type
+System.string;stringA.length;TypeMismatch
+System.boolean;gettype().name;TypeMismatch
+System.double;doublea.tostring();TypeMismatch
+' Methods
+'	method that doesn't return a value
+System.object;DoStuff();FunctionHasNoReturnValue
+'	wrong argument count
+System.object;math.max(1,2,3);TypeMismatch
+System.object;math.cos();TypeMismatch
+'	undefined name
+System.object;method();UndefinedName
+System.object;math.zzz();UndefinedName
+System.object;math.zzz(1,2,3);UndefinedName
+'	wrong arg types
+System.object;math.cos("abc");TypeMismatch
+System.object;math.cos(true);TypeMismatch
+System.object;string.copy(100);TypeMismatch
+System.object;string.copy(100);TypeMismatch
+System.object;Doubleit(3.45);TypeMismatch
+System.object;Doubleit();TypeMismatch
+' Conditional operator
+'	First argument not boolean
+System.object;if("a",100,200);TypeMismatch
+'	Not 3 arguments
+System.object;if();TypeMismatch
+System.object;if("a");TypeMismatch
+System.object;if("a",100);TypeMismatch
+System.object;if("a",100,200);TypeMismatch
+System.object;if("a",100,200,300);TypeMismatch
+'	True/false arguments not convertible
+System.object;if(true,"a", 100);TypeMismatch
+System.object;if(true,100, true);TypeMismatch
+System.object;if(true,true, "string");TypeMismatch
+System.object;if(true,1.2, gettype());TypeMismatch
+' Arithmetic on small integers gives a big int
+System.byte;bytea*bytea;TypeMismatch
+System.sbyte;sbytea*sbytea;TypeMismatch
+System.int16;int16a + int16a;TypeMismatch
+System.uint16;uint16a + uint16a;TypeMismatch
+' Can't add sbyte + uint64
+System.object;sbytea + 100UL;TypeMismatch
+' Can't add short + uint64
+System.object;int16a + 100UL;TypeMismatch
+' Invalid casts
+system.object;cast(100, blah);InvalidExplicitCast
+'	Can't cast anything to/from boolean
+System.object;cast("a", boolean);InvalidExplicitCast
+System.object;cast(100.25, boolean);InvalidExplicitCast
+System.object;cast(-100, boolean);InvalidExplicitCast
+system.object;cast(true, int);InvalidExplicitCast
+system.object;cast(1 > 0, single);InvalidExplicitCast
+'	Cast from one value type to another
+System.object;cast(datetimea, Guid);InvalidExplicitCast
+System.object;cast(int32a, Guid);InvalidExplicitCast
+'	Value type to invalid reference type
+System.object;cast(100, string);InvalidExplicitCast
+System.object;cast(22.34, Version);InvalidExplicitCast
+'	Reference type to invalid value type
+System.object;cast("abc", int);InvalidExplicitCast
+System.object;cast("abc", Guid);InvalidExplicitCast
+system.object;cast(ICollectionA, Guid);InvalidExplicitCast
+'	Reference type to invalid reference type
+'		to class not derived from source
+System.object;cast("abc",Version);InvalidExplicitCast
+'		to interface from sealed class
+System.object;cast("abc", IDisposable);InvalidExplicitCast
+'		to class from unimplemented interface
+System.object;cast(icollectiona, String);InvalidExplicitCast
+'		to array
+System.object;cast("abc", int[]);InvalidExplicitCast
+System.object;cast(100, int[]);InvalidExplicitCast
+System.object;cast("abc", string[]);InvalidExplicitCast
+System.object;cast("abc", Array);InvalidExplicitCast
+'		array to invalid type
+System.object;cast(intarr, string);InvalidExplicitCast
+System.object;cast(intarr, double);InvalidExplicitCast
+System.object;cast(stringarr, Version);InvalidExplicitCast
+System.object;cast(stringarr, int);InvalidExplicitCast
+System.object;cast(stringarr, iComparable);InvalidExplicitCast
+'		System.Array to invalid type
+System.object;cast(arraya, IComparable);InvalidExplicitCast
+System.object;cast(arraya, string);InvalidExplicitCast
+'		System.delegate
+System.object;cast(delegateanull, string);InvalidExplicitCast
+System.object;cast(delegateanull, int);InvalidExplicitCast
+System.object;cast(delegateanull, Icomparable);InvalidExplicitCast
+'		Concrete delegate
+System.object;cast(delegatea, string);InvalidExplicitCast
+System.object;cast(delegatea, int);InvalidExplicitCast
+System.object;cast(delegatea, Icomparable);InvalidExplicitCast
+'	Invalid array casts
+'		mixing reference types and value types
+System.object;cast(stringarr, int[]);InvalidExplicitCast
+System.object;cast(intarr, object[]);InvalidExplicitCast
+System.object;cast(intarr, string[]);InvalidExplicitCast
+'	With global types
+System.object;cast("abc", System.text.encoding);InvalidExplicitCast
+System.object;cast(stringarr, System.text.encoding[]);InvalidExplicitCast
+'	Enums
+System.object;cast(DayofWeek.Tuesday, string);InvalidExplicitCast
+'	Arrays
+'	index on non-array
+System.object;bytea[0];TypeMismatch
+'	invalid index type
+System.object;intarr["a"];TypeMismatch
+system.object;intarr[true];TypeMismatch
+system.object;intarr[1.2];TypeMismatch
+System.object;stringdict[100];TypeMismatch
+' Char
+'	invalid implicit conversion
+System.sbyte;'^';TypeMismatch
+System.byte;'^';TypeMismatch
+System.int16;'^';TypeMismatch
+System.string;'^';TypeMismatch
+'	invalid cast
+System.string;cast('^',string);TypeMismatch
+' Shifts
+'	invalid argument types
+System.object;"a" >> 2;TypeMismatch
+System.object;1.2 >> 2;TypeMismatch
+System.object;100 >> "a";TypeMismatch
+System.object;100 >> true;TypeMismatch
+System.object;100 >> 2.3f;TypeMismatch
+System.object;100 >> 100U;TypeMismatch
+System.object;100 >> 100L;TypeMismatch
+System.object;100 >> 100LU;TypeMismatch
+'	invalid result type
+System.int32;100U >> 2;TypeMismatch
+System.uint32;100L >> 2;TypeMismatch
+System.uint64;100L >> 2;TypeMismatch
+System.int32;100LU >> 2;TypeMismatch
+' Invalid escapes
+System.string;"\z";TypeMismatch
+System.string;"\Uzzzz";TypeMismatch
+' Invalid reference comparisons
+System.boolean;null > null;TypeMismatch
+System.boolean;null <= null;TypeMismatch
+System.boolean;null > "abc";TypeMismatch
+System.boolean;null > stringa;TypeMismatch
+System.boolean;null < 100;TypeMismatch
+System.boolean;null = 100;TypeMismatch
+System.boolean;true = null;TypeMismatch
+System.boolean;100.23 <> null;TypeMismatch
+System.boolean;instancea = 100;TypeMismatch
+System.boolean;instanceb <> 100;TypeMismatch
+system.boolean;datetimea = null;TypeMismatch
+' Invalid operations with null
+System.object;null + 1;TypeMismatch
+System.object;null * 2;TypeMismatch
+System.object;null / null;TypeMismatch
+System.object;null and null;TypeMismatch
+System.object;1 + -null;TypeMismatch
+System.object;true and not null;TypeMismatch
+System.object;cast(null, int);TypeMismatch
+'	call with null to method with a value type argument
+System.object;Math.cos(null);TypeMismatch
+' ParamArray calls
+'	ambiguous call between two paramArrays
+System.object;ParamArray4();AmbiguousMatch
+'	arguments not convertible to paramArray type
+System.object;sum4(100.24, 13.4);TypeMismatch
+System.object;sum4(100, "a");TypeMismatch
+System.object;sum4("a");TypeMismatch
+' With calc engine atoms
+System.object;StringA.$a;TypeMismatch
+System.object;$a.$b;TypeMismatch
+' In operator
+System.boolean;100 in 100;TypeMismatch
+System.boolean;"a" in stringDict;TypeMismatch
+System.boolean;"abc" in stringa;TypeMismatch
+System.boolean;100 in (1, 2, "abc");TypeMismatch
+System.boolean;'a' in ();TypeMismatch
+System.boolean;decimalA in (1.24, 3.45);TypeMismatch
+System.boolean;"abc" in intArr;TypeMismatch
+System.boolean;100 in GenericDict;TypeMismatch
+' Compare of two different enums
+System.object;DayOfWeek.Friday = ConsoleModifiers.Alt;TypeMismatch
+' DateTime
+System.object;#123/11/2008#;SyntaxError
+System.object;#12/13/2008#;SyntaxError
+System.object;#45/06/2008#;SyntaxError
+' TimeSpan
+System.object;##1.44:30#;SyntaxError
+System.object;##0.4:77#;SyntaxError
+System.object;##0.24:00#;InvalidFormat
+System.object;##0.00:60#;InvalidFormat
+System.object;##0.00:44.12345678#;InvalidFormat
+' Indexers with too many arguments
+System.int32;KeyboardA.structA["s", 100, 45.5];200
+' Array index with multiple arguments
+System.object;intarr[1,2,3];TypeMismatch
