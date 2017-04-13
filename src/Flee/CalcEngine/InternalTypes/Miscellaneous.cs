@@ -45,18 +45,12 @@ namespace Flee.CalcEngine.InternalTypes
             return _myName;
         }
 
-        public string Name
-        {
-            get { return _myName; }
-        }
+        public string Name => _myName;
 
         public abstract Type ResultType { get; }
         public abstract object ResultAsObject { get; set; }
 
-        public IDynamicExpression Expression
-        {
-            get { return MyExpression; }
-        }
+        public IDynamicExpression Expression => MyExpression;
     }
 
     internal class GenericExpressionResultPair<T> : ExpressionResultPair
@@ -71,15 +65,9 @@ namespace Flee.CalcEngine.InternalTypes
             MyResult = (T)MyExpression.Evaluate();
         }
 
-        public T Result
-        {
-            get { return MyResult; }
-        }
+        public T Result => MyResult;
 
-        public override System.Type ResultType
-        {
-            get { return typeof(T); }
-        }
+        public override System.Type ResultType => typeof(T);
 
         public override object ResultAsObject
         {
@@ -105,9 +93,9 @@ namespace Flee.CalcEngine.InternalTypes
     public sealed class NodeEventArgs : EventArgs
     {
 
-        private string MyName;
+        private string _myName;
 
-        private object MyResult;
+        private object _myResult;
 
         internal NodeEventArgs()
         {
@@ -115,19 +103,13 @@ namespace Flee.CalcEngine.InternalTypes
 
         internal void SetData(string name, object result)
         {
-            MyName = name;
-            MyResult = result;
+            _myName = name;
+            _myResult = result;
         }
 
-        public string Name
-        {
-            get { return MyName; }
-        }
+        public string Name => _myName;
 
-        public object Result
-        {
-            get { return MyResult; }
-        }
+        public object Result => _myResult;
     }
 
 }

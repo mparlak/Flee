@@ -38,6 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Flee, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Flee.1.0.0\lib\net452\Flee.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -67,12 +70,6 @@
     <Content Include="TestScripts\SimpleCalcEngineTests.txt" />
     <Content Include="TestScripts\ValidCasts.txt" />
     <Content Include="TestScripts\ValidExpressions.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Flee\Flee.csproj">
-      <Project>{9bb53f0f-de40-469d-a75b-f8d0140969b5}</Project>
-      <Name>Flee</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

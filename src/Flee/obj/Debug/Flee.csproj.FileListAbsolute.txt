@@ -8,3 +8,13 @@ C:\Users\02483878\Documents\Visual Studio 2017\Projects\Flee\src\Flee\obj\Debug\
 C:\Users\02483878\Documents\Visual Studio 2017\Projects\Flee\src\Flee\obj\Debug\Flee.Resources.GeneralErrors.resources
 C:\Users\02483878\Documents\Visual Studio 2017\Projects\Flee\src\Flee\obj\Debug\Flee.csproj.GenerateResource.Cache
 C:\Users\02483878\Documents\Visual Studio 2017\Projects\Flee\src\Flee\bin\Debug\Flee.xml
+C:\Users\02483878\Source\Repos\Flee\src\Flee\bin\Debug\Flee.xml
+C:\Users\02483878\Source\Repos\Flee\src\Flee\bin\Debug\Flee.dll
+C:\Users\02483878\Source\Repos\Flee\src\Flee\bin\Debug\Flee.pdb
+C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.csprojResolveAssemblyReference.cache
+C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.Resources.CompileErrors.resources
+C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.Resources.ElementNames.resources
+C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.Resources.GeneralErrors.resources
+C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.csproj.GenerateResource.Cache
+C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.dll
+C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.pdb

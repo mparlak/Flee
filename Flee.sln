@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.0
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B3847C6A-A387-45AE-B697-7020F93A7120}"
 EndProject
@@ -9,21 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{FE73F713-B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flee", "src\Flee\Flee.csproj", "{9BB53F0F-DE40-469D-A75B-F8D0140969B5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FEFFD526-53AC-468C-A259-52C9451E064A}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Desktop\MiniRest.NetCore\nuget.exe = ..\..\..\..\Desktop\MiniRest.NetCore\nuget.exe
-		..\..\..\..\Desktop\MiniRest.NetCore\Package.nuspec = ..\..\..\..\Desktop\MiniRest.NetCore\Package.nuspec
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flee.Test", "test\Flee.Test\Flee.Test.csproj", "{55EA6F5A-3C4D-431F-A576-85F44B513FD3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{95C8D269-499F-41C2-A7EF-27FE67F70211}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ref", "ref", "{95082E1B-3E51-4ECF-9EAD-470B06478E80}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net452", "net452", "{062F12B4-6FF7-466A-9CA4-21A976DFB2F0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net452", "net452", "{BC4864C9-277E-4CFD-B254-486E3E3223E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,9 +32,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9BB53F0F-DE40-469D-A75B-F8D0140969B5} = {B3847C6A-A387-45AE-B697-7020F93A7120}
 		{55EA6F5A-3C4D-431F-A576-85F44B513FD3} = {FE73F713-B16C-4252-8D4F-291961822887}
-		{95C8D269-499F-41C2-A7EF-27FE67F70211} = {FEFFD526-53AC-468C-A259-52C9451E064A}
-		{95082E1B-3E51-4ECF-9EAD-470B06478E80} = {FEFFD526-53AC-468C-A259-52C9451E064A}
-		{062F12B4-6FF7-466A-9CA4-21A976DFB2F0} = {95082E1B-3E51-4ECF-9EAD-470B06478E80}
-		{BC4864C9-277E-4CFD-B254-486E3E3223E5} = {95C8D269-499F-41C2-A7EF-27FE67F70211}
 	EndGlobalSection
 EndGlobal

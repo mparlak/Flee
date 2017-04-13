@@ -11,7 +11,7 @@ namespace Flee.Test.CalcEngineTests
     public class CalcEngineTestFixture
     {
         [Test]
-        public void TestBasic()
+        public void Test_Basic()
         {
             var ce = new CalculationEngine();
             var context = new ExpressionContext();
@@ -35,7 +35,7 @@ namespace Flee.Test.CalcEngineTests
         }
 
         [Test]
-        public void TestMutipleIdenticalReferences()
+        public void Test_MutipleIdentical_References()
         {
             var ce = new CalculationEngine();
             var context = new ExpressionContext();
@@ -50,7 +50,7 @@ namespace Flee.Test.CalcEngineTests
         }
 
         [Test]
-        public void TestComplex()
+        public void Test_Complex()
         {
             var ce = new CalculationEngine();
             var context = new ExpressionContext();
@@ -68,6 +68,118 @@ namespace Flee.Test.CalcEngineTests
 
             var result = ce.GetResult<int>("e");
             Assert.AreEqual((100 * 2) + (24 * 2) + ((100 * 2) + (24 * 2)) + 80, result);
+        }
+
+        [Test]
+        public void Test_Arithmetic()
+        {
+            var ce = new CalculationEngine();
+            var context = new ExpressionContext();
+            var variables = context.Variables;
+
+            variables.Add("a", 10);
+            variables.Add("b", 20);
+            ce.Add("x", "((a * 2) + (b ^ 2)) - (100 % 5)", context);
+            ce.Recalculate("x");
+            var result = ce.GetResult<int>("x");
+            Assert.AreEqual(420, result);
+        }
+
+        [Test]
+        public void Test_Comparison_Operators()
+        {
+            var ce = new CalculationEngine();
+            var context = new ExpressionContext();
+            var variables = context.Variables;
+
+            variables.Add("a", 10);
+            ce.Add("x", "a <> 100", context);
+            ce.Recalculate("x");
+            var result = ce.GetResult<bool>("x");
+            Assert.AreEqual(420, result);
+        }
+
+        [Test]
+        public void Test_And_Or_Xor_Not_Operators()
+        {
+            var ce = new CalculationEngine();
+            var context = new ExpressionContext();
+            var variables = context.Variables;
+
+            variables.Add("a", 10);
+            ce.Add("x", "a > 100", context);
+            ce.Recalculate("x");
+            var result = ce.GetResult<bool>("x");
+            Assert.IsFalse(result);
+            ce.Remove("x");
+            variables.Add("b", 100);
+            ce.Add("x", "b = 100", context);
+            ce.Recalculate("x");
+            result = ce.GetResult<bool>("x");
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Test_Shift_Operators()
+        {
+            var ce = new CalculationEngine();
+            var context = new ExpressionContext();
+            var variables = context.Variables;
+
+            ce.Add("x", "100 >> 2", context);
+            ce.Recalculate("x");
+            var result = ce.GetResult<bool>("x");
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void Test_Recalculate_NonSource()
+        {
+            var ce = new CalculationEngine();
+            var context = new ExpressionContext();
+            var variables = context.Variables;
+
+            variables.Add("x", 100);
+            ce.Add("a", "x * 2", context);
+            variables.Add("y", 1);
+            ce.Add("b", "a + y", context);
+            ce.Add("c", "b * 2", context);
+            ce.Recalculate("a", "b");
+            var result = ce.GetResult<int>("c");
+            Assert.AreEqual(((100) * 2 + 1) * 2, result);
+        }
+
+        [Test]
+        public void Test_Partial_Recalculate()
+        {
+            var ce = new CalculationEngine();
+            var context = new ExpressionContext();
+            var variables = context.Variables;
+
+            variables.Add("x", 100);
+            ce.Add("a", "x * 2", context);
+            variables.Add("y", 1);
+            ce.Add("b", "a + y", context);
+            ce.Add("c", "b * 2", context);
+            ce.Recalculate("a");
+            variables.Add("y", 222);
+            ce.Recalculate("b");
+            var result = ce.GetResult<int>("c");
+            Assert.AreEqual(((100 * 2) + 222) * 2, result);
+        }
+
+        [Test, ExpectedException(typeof(CircularReferenceException))]
+        public void Test_Circular_Reference1()
+        {
+            var ce = new CalculationEngine();
+            var context = new ExpressionContext();
+            var variables = context.Variables;
+
+            variables.Add("x", 100);
+            ce.Add("a", "x * 2", context);
+            variables.Add("y", 1);
+            ce.Add("b", "a + y + b", context);
+            ce.Recalculate("a");
         }
     }
 }

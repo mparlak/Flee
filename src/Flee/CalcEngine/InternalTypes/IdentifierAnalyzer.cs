@@ -78,7 +78,7 @@ namespace Flee.CalcEngine.InternalTypes
             _myInFieldPropertyExpression = false;
         }
 
-        public void Reset()
+        public override void Reset()
         {
             _myIdentifiers.Clear();
             _myMemberExpressionCount = -1;

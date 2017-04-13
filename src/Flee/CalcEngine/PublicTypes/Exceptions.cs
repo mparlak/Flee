@@ -50,15 +50,9 @@ namespace Flee.CalcEngine.PublicTypes
             _myExpressionText = expressionText;
         }
 
-        public string AtomName
-        {
-            get { return _myAtomName; }
-        }
+        public string AtomName => _myAtomName;
 
-        public string ExpressionText
-        {
-            get { return _myExpressionText; }
-        }
+        public string ExpressionText => _myExpressionText;
     }
 
 }
