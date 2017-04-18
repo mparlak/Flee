@@ -56,6 +56,8 @@
   <ItemGroup>
     <Compile Include="CalcEngineTests\CalcEngineTestFixture.cs" />
     <Compile Include="CalcEngineTests\SimpleCalcEngineTests.cs" />
+    <Compile Include="ExpressionTests\Benchmarks.cs" />
+    <Compile Include="ExpressionTests\Core.cs" />
     <Compile Include="Infrastructure\Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -16,6 +16,6 @@
     <tags>flee,expression evaluator,Expression Evaluator for c#</tags>
   </metadata>
   <files>
-      <file src="lib\net461\*.dll" target="lib\net461" />
-    </files>
+      <file src="lib\net461\Flee.dll" target="lib\net461" />
+  </files>
 </package>
