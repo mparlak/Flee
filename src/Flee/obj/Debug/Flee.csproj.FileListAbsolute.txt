@@ -16,5 +16,6 @@ C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.Resources.CompileErr
 C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.Resources.ElementNames.resources
 C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.Resources.GeneralErrors.resources
 C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.csproj.GenerateResource.Cache
+C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.csproj.CoreCompileInputs.cache
 C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.dll
 C:\Users\02483878\Source\Repos\Flee\src\Flee\obj\Debug\Flee.pdb

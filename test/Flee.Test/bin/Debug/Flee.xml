@@ -1,0 +1,1291 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Flee</name>
+    </assembly>
+    <members>
+        <member name="T:Flee.CalcEngine.InternalTypes.DependencyManager`1">
+            <summary>
+            Keeps track of our dependencies
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="F:Flee.CalcEngine.InternalTypes.DependencyManager`1._myDependentsMap">
+            <summary>
+            Map of a node and the nodes that depend on it
+            </summary>
+        </member>
+        <member name="F:Flee.CalcEngine.InternalTypes.DependencyManager`1._myPrecedentsMap">
+            <summary>
+            Map of a node and the number of nodes that point to it
+            </summary>
+        </member>
+        <member name="M:Flee.CalcEngine.InternalTypes.DependencyManager`1.GetSources(`0[])">
+            <summary>
+             Add all nodes that don't have any incoming edges into a queue
+            </summary>
+            <param name="rootTails"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Flee.CalcEngine.PublicTypes.CalculationEngine._myNameNodeMap">
+            <summary>
+            Map of name to node
+            </summary>
+        </member>
+        <member name="M:Flee.CalcEngine.PublicTypes.CalculationEngine.AddDependency(System.String,Flee.PublicTypes.ExpressionContext)">
+            <summary>
+            Called by an expression when it references another expression in the engine
+            </summary>
+            <param name="tailName"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.ArithmeticElement.EmitArithmeticOperation(Flee.InternalTypes.BinaryArithmeticOperation,Flee.InternalTypes.FleeILGenerator,System.IServiceProvider)">
+            <summary>
+            Emit an arithmetic operation with handling for unsigned and checked contexts
+            </summary>
+            <param name="op"></param>
+            <param name="ilg"></param>
+            <param name="services"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.ArithmeticElement.EmitStringConcat(Flee.InternalTypes.FleeILGenerator,System.IServiceProvider)">
+            <summary>
+            Emit a string concatenation
+            </summary>
+            <param name="ilg"></param>
+            <param name="services"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.Base.BinaryExpressionElement.CreateElement(System.Collections.IList,System.Type)">
+            <summary>
+            Converts a list of binary elements into a binary tree
+            </summary>
+            <param name="childValues"></param>
+            <param name="elementType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.ExpressionElements.Base.BinaryExpressionElement.Configure(Flee.ExpressionElements.Base.ExpressionElement,Flee.ExpressionElements.Base.ExpressionElement,System.Object)">
+            <summary>
+            Set the left and right operands, get the operation, and get the result type
+            </summary>
+            <param name="leftChild"></param>
+            <param name="rightChild"></param>
+            <param name="op"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.Base.ExpressionElement.Emit(Flee.InternalTypes.FleeILGenerator,System.IServiceProvider)">
+            <summary>
+            // All expression elements must be able to emit their IL
+            </summary>
+            <param name="ilg"></param>
+            <param name="services"></param>
+        </member>
+        <member name="P:Flee.ExpressionElements.Base.ExpressionElement.ResultType">
+            <summary>
+            All expression elements must expose the Type they evaluate to
+            </summary>
+        </member>
+        <member name="M:Flee.ExpressionElements.Base.Literals.IntegralLiteralElement.Create(System.String,System.Boolean,System.Boolean,System.IServiceProvider)">
+            <summary>
+            Attempt to find the first type of integer that a number can fit into
+            </summary>
+            <param name="image"></param>
+            <param name="isHex"></param>
+            <param name="negated"></param>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.ExpressionElements.Base.MemberElement.EmitMethodCall(System.Reflection.MethodInfo,Flee.InternalTypes.FleeILGenerator)">
+            <summary>
+            Handles a call emit for static, instance methods of reference/value types
+            </summary>
+            <param name="mi"></param>
+            <param name="ilg"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.Base.MemberElement.EmitValueTypeMethodCall(System.Reflection.MethodInfo,Flee.InternalTypes.FleeILGenerator)">
+            <summary>
+            Emit a function call for a value type
+            </summary>
+            <param name="mi"></param>
+            <param name="ilg"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.Base.MemberElement.IsMemberPublic(System.Reflection.MemberInfo)">
+            <summary>
+            Determine if a field, property, or method is public
+            </summary>
+            <param name="member"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.ExpressionElements.Base.MemberElement.GetDefaultNamespaceMembers(System.String,System.Reflection.MemberTypes)">
+            <summary>
+            Find members in the default namespace
+            </summary>
+            <param name="name"></param>
+            <param name="memberType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.ExpressionElements.CastElement.GetDestType(System.String[],System.IServiceProvider)">
+            <summary>
+            Resolve the type we are casting to
+            </summary>
+            <param name="destTypeParts"></param>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.ExpressionElements.CompareElement.EmitCompareOperation(Flee.InternalTypes.FleeILGenerator,Flee.InternalTypes.LogicalCompareOperation)">
+            <summary>
+            Emit the actual compare
+            </summary>
+            <param name="ilg"></param>
+            <param name="op"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.CompareElement.GetCompareGTLTOpcode(System.Boolean)">
+            <summary>
+            Get the correct greater/less than opcode
+            </summary>
+            <param name="greaterThan"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.ExpressionElements.LogicalBitwise.AndOrElement.EmitLogical(Flee.InternalTypes.FleeILGenerator,Flee.InternalTypes.ShortCircuitInfo,System.IServiceProvider)">
+            <summary>
+            Emit a short-circuited logical operation sequence
+            The idea: Store all the leaf operands in a stack with the leftmost at the top and rightmost at the bottom.
+            For each operand, emit it and try to find an end point for when it short-circuits.  This means we go up through
+            the stack of operators (ignoring siblings) until we find a different operation (then emit a branch to its right operand)
+            or we reach the root (emit a branch to a true/false).
+            Repeat the process for all operands and then emit the true/false/last operand end cases.
+            </summary>
+            <param name="ilg"></param>
+            <param name="info"></param>
+            <param name="services"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.LogicalBitwise.AndOrElement.EmitLogicalShortCircuit(Flee.InternalTypes.FleeILGenerator,Flee.InternalTypes.ShortCircuitInfo,System.IServiceProvider)">
+            <summary>
+            Emit a sequence of and/or expressions with short-circuiting
+            </summary>
+            <param name="ilg"></param>
+            <param name="info"></param>
+            <param name="services"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.LogicalBitwise.AndOrElement.GetBranchOpcode(Flee.ExpressionElements.LogicalBitwise.AndOrElement,System.Boolean)">
+            <summary>
+            Emit a short/long branch for an And/Or element
+            </summary>
+            <param name="op"></param>
+            <param name="longBranch"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.ExpressionElements.LogicalBitwise.AndOrElement.GetShortCircuitLabel(Flee.ExpressionElements.LogicalBitwise.AndOrElement,Flee.InternalTypes.ShortCircuitInfo,Flee.InternalTypes.FleeILGenerator)">
+            <summary>
+            Get the label for a short-circuit
+            </summary>
+            <param name="current"></param>
+            <param name="info"></param>
+            <param name="ilg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.ExpressionElements.LogicalBitwise.AndOrElement.Pop(System.Collections.Stack,System.Collections.Stack)">
+            <summary>
+            Recursively pop operators and operands
+            </summary>
+            <param name="operands"></param>
+            <param name="operators"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.LogicalBitwise.AndOrElement.EmitTerminals(Flee.InternalTypes.ShortCircuitInfo,Flee.InternalTypes.FleeILGenerator,System.Reflection.Emit.Label)">
+            <summary>
+            Emit the end cases for a short-circuit
+            </summary>
+            <param name="info"></param>
+            <param name="ilg"></param>
+            <param name="endLabel"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.LogicalBitwise.AndOrElement.MarkBranchTarget(Flee.InternalTypes.ShortCircuitInfo,System.Reflection.Emit.Label,Flee.InternalTypes.FleeILGenerator)">
+            <summary>
+            Note a label's position if we are in mark mode
+            </summary>
+            <param name="info"></param>
+            <param name="target"></param>
+            <param name="ilg"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.LogicalBitwise.AndOrElement.PopulateData(Flee.InternalTypes.ShortCircuitInfo)">
+            <summary>
+            Visit the nodes of the tree (right then left) and populate some data structures
+            </summary>
+            <param name="info"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.MemberElements.FunctionCallElement.BindToMethod(System.Collections.Generic.ICollection{System.Reflection.MethodInfo},Flee.ExpressionElements.Base.MemberElement,System.Type[])">
+            <summary>
+            Try to find a match from a set of methods
+            </summary>
+            <param name="methods"></param>
+            <param name="previous"></param>
+            <param name="argTypes"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.MemberElements.FunctionCallElement.ResolveOverloads(Flee.InternalTypes.CustomMethodInfo[],Flee.ExpressionElements.Base.MemberElement,System.Type[])">
+            <summary>
+            Find the best match from a set of overloaded methods
+            </summary>
+            <param name="infos"></param>
+            <param name="previous"></param>
+            <param name="argTypes"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.MemberElements.FunctionCallElement.DetectAmbiguousMatches(Flee.InternalTypes.CustomMethodInfo[])">
+            <summary>
+             Handle case where we have overloads with the same score
+            </summary>
+            <param name="infos"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.MemberElements.FunctionCallElement.EmitElementArrayLoad(Flee.ExpressionElements.Base.ExpressionElement[],System.Type,Flee.InternalTypes.FleeILGenerator,System.IServiceProvider)">
+            <summary>
+            Emit elements into an array
+            </summary>
+            <param name="elements"></param>
+            <param name="arrayElementType"></param>
+            <param name="ilg"></param>
+            <param name="services"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.MemberElements.FunctionCallElement.EmitRegularFunctionInternal(System.Reflection.ParameterInfo[],Flee.ExpressionElements.Base.ExpressionElement[],Flee.InternalTypes.FleeILGenerator,System.IServiceProvider)">
+            <summary>
+             Emit the arguments to a regular method call
+            </summary>
+            <param name="parameters"></param>
+            <param name="elements"></param>
+            <param name="ilg"></param>
+            <param name="services"></param>
+        </member>
+        <member name="P:Flee.ExpressionElements.MemberElements.FunctionCallElement.Method">
+            <summary>
+            The method info we will be calling
+            </summary>	
+        </member>
+        <member name="M:Flee.ExpressionElements.MemberElements.IdentifierElement.EmitLiteral(System.Reflection.FieldInfo,Flee.InternalTypes.FleeILGenerator,System.IServiceProvider)">
+            <summary>
+            Emit the load of a constant field.  We can't emit a ldsfld/ldfld of a constant so we have to get its value
+            and then emit a ldc.
+            </summary>
+            <param name="fi"></param>
+            <param name="ilg"></param>
+            <param name="services"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.MemberElements.IdentifierElement.EmitVirtualPropertyLoad(Flee.InternalTypes.FleeILGenerator)">
+            <summary>
+            Load a PropertyDescriptor based property
+            </summary>
+            <param name="ilg"></param>
+        </member>
+        <member name="M:Flee.ExpressionElements.MemberElements.InvocationListElement.LinkElements(System.Collections.IList)">
+            <summary>
+            Arrange elements as a linked list
+            </summary>
+            <param name="elements"></param>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.ComputeBranches">
+            <summary>
+            Determine whether to use short or long branches
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.CountLongBranches(System.Collections.Generic.ICollection{Flee.InternalTypes.BranchInfo})">
+            <summary>
+            Count the number of long branches in a set
+            </summary>
+            <param name="dest"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.FindBetweenBranches(Flee.InternalTypes.BranchInfo,System.Collections.Generic.ICollection{Flee.InternalTypes.BranchInfo})">
+            <summary>
+            Find all the branches between the start and end locations of a target branch
+            </summary>
+            <param name="target"></param>
+            <param name="dest"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.IsLongBranch(Flee.InternalTypes.FleeILGenerator,System.Reflection.Emit.Label)">
+            <summary>
+            Determine if a branch from a point to a label will be long
+            </summary>
+            <param name="ilg"></param>
+            <param name="target"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.AddBranch(Flee.InternalTypes.FleeILGenerator,System.Reflection.Emit.Label)">
+            <summary>
+            Add a branch from a location to a target label
+            </summary>
+            <param name="ilg"></param>
+            <param name="target"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.FindLabel(System.Object)">
+            <summary>
+            Get a label by a key
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.GetLabel(System.Object,Flee.InternalTypes.FleeILGenerator)">
+            <summary>
+            Get a label by a key.  Create the label if it is not present.
+            </summary>
+            <param name="key"></param>
+            <param name="ilg"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.HasLabel(System.Object)">
+            <summary>
+            Determines if we have a label for a key
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.BranchManager.MarkLabel(Flee.InternalTypes.FleeILGenerator,System.Reflection.Emit.Label)">
+            <summary>
+            Set the position for a label
+            </summary>
+            <param name="ilg"></param>
+            <param name="target"></param>
+            <remarks></remarks>
+        </member>
+        <member name="F:Flee.InternalTypes.ILLocation.LongBranchAdjust">
+            <summary>
+            ' Long branch is 5 bytes; short branch is 2; so we adjust by the difference
+            </summary>
+        </member>
+        <member name="F:Flee.InternalTypes.ILLocation.BrSLength">
+            <summary>
+            Length of the Br_s opcode
+            </summary>
+        </member>
+        <member name="M:Flee.InternalTypes.ILLocation.AdjustForLongBranch(System.Int32)">
+            <summary>
+            Adjust our position by a certain amount of long branches
+            </summary>
+            <param name="longBranchCount"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Flee.InternalTypes.ILLocation.IsLongBranch(Flee.InternalTypes.ILLocation)">
+            <summary>
+            Determine if this branch is long
+            </summary>
+            <param name="target"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="F:Flee.InternalTypes.ImplicitConverter.OurBinaryResultTable">
+            <summary>
+            Table of results for binary operations using primitives
+            </summary>
+        </member>
+        <member name="F:Flee.InternalTypes.ImplicitConverter.OurBinaryTypes">
+            <summary>
+            Primitive types we support
+            </summary>
+        </member>
+        <member name="M:Flee.InternalTypes.ImplicitConverter.EmitImplicitNumericConvert(System.Type,System.Type,Flee.InternalTypes.FleeILGenerator)">
+             <summary>
+            Emit an implicit conversion (if the ilg is not null) and returns a value that determines whether the implicit conversion
+             succeeded
+             </summary>
+             <param name="sourceType"></param>
+             <param name="destType"></param>
+             <param name="ilg"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Flee.InternalTypes.ImplicitConverter.GetBinaryResultType(System.Type,System.Type)">
+            <summary>
+            Get the result type for a binary operation
+            </summary>
+            <param name="t1"></param>
+            <param name="t2"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Flee.InternalTypes.CustomMethodInfo._myTarget">
+            <summary>
+            Method we are wrapping
+            </summary>
+        </member>
+        <member name="F:Flee.InternalTypes.CustomMethodInfo._myScore">
+            <summary>
+            The rating of how close the method matches the given arguments (0 is best)
+            </summary>
+        </member>
+        <member name="M:Flee.InternalTypes.CustomMethodInfo.ComputeScoreInternal(System.Reflection.ParameterInfo[],System.Type[])">
+            <summary>
+            Compute a score showing how close our method matches the given argument types
+            </summary>
+            <param name="parameters"></param>
+            <param name="argTypes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.InternalTypes.CustomMethodInfo.IsMatch(System.Type[])">
+            <summary>
+            Is the given MethodInfo usable as an overload?
+            </summary>
+            <param name="argTypes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Flee.InternalTypes.Utility.GetSimpleOverloadedOperator(System.String,System.Type,System.Type)">
+            <summary>
+            Find a simple (unary) overloaded operator
+            </summary>
+            <param name="name">The name of the operator</param>
+            <param name="sourceType">The type to convert from</param>
+            <param name="destType">The type to convert to</param>
+            <returns>The operator's method or null of no match is found</returns>
+        </member>
+        <member name="M:Flee.InternalTypes.Utility.SimpleOverloadedOperatorFilter(System.Reflection.MemberInfo,System.Object)">
+            <summary>
+            Matches simple overloaded operators
+            </summary>
+            <param name="member"></param>
+            <param name="value"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:Flee.Parsing.ExpressionAnalyzer">
+            <summary>
+            A class providing callback methods for the parser.
+            </summary>
+        </member>
+        <member name="M:Flee.Parsing.ExpressionAnalyzer.Enter(Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Node)">
+            <summary>
+            Called when entering a parse tree node.
+            </summary>
+            <param name="node"></param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Flee.Parsing.ExpressionAnalyzer.Exit(Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Node)" -->
+        <member name="M:Flee.Parsing.ExpressionAnalyzer.Child(Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Production,Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Node)">
+            <summary>
+            Called when adding a child to a parse tree node.
+            </summary>
+            <param name="node"></param>
+            <param name="child"></param>
+        </member>
+        <member name="T:Flee.Parsing.ExpressionConstants">
+            <remarks>
+             An enumeration with token and production node
+            constants.</remarks>
+        </member>
+        <member name="T:Flee.Parsing.ExpressionParser">
+            <summary>
+            A token stream parser.
+            </summary>
+        </member>
+        <member name="T:Flee.Parsing.ExpressionTokenizer">
+            <summary>
+            A character stream tokenizer.
+            </summary>
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.AlternativeElement">
+            A regular expression alternative element. This element matches
+            the longest alternative element.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.CharacterSetElement">
+            A regular expression character set element. This element
+            matches a single character inside (or outside) a character set.
+            The character set is user defined and may contain ranges of
+            characters. The set may also be inverted, meaning that only
+            characters not inside the set will be considered to match.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.Element">
+            A regular expression element. This is the common base class for
+            all regular expression elements, i.e. the parts of the regular
+            expression.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.Matcher">
+            A regular expression string matcher. This class handles the
+            matching of a specific string with a specific regular
+            expression. It contains state information about the matching
+            process, as for example the position of the latest match, and a
+            number of flags that were set. This class is not thread-safe.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.RegExp">
+            A regular expression. This class creates and holds an internal
+            data structure representing a regular expression. It also
+            allows creating matchers. This class is thread-safe. Multiple
+            matchers may operate simultanously on the same regular
+            expression.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.RegExpException">
+            A regular expression exception. This exception is thrown if a
+            regular expression couldn't be processed (or "compiled")
+            properly.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.RegExpException.ErrorType.UNEXPECTED_CHARACTER">
+            The unexpected character error constant. This error is
+            used when a character was read that didn't match the
+            allowed set of characters at the given position.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.RegExpException.ErrorType.UNTERMINATED_PATTERN">
+            The unterminated pattern error constant. This error is
+            used when more characters were expected in the pattern.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.RegExpException.ErrorType.UNSUPPORTED_SPECIAL_CHARACTER">
+            The unsupported special character error constant. This
+            error is used when special regular expression
+            characters are used in the pattern, but not supported
+            in this implementation.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.RegExpException.ErrorType.UNSUPPORTED_ESCAPE_CHARACTER">
+            The unsupported escape character error constant. This
+            error is used when an escape character construct is
+            used in the pattern, but not supported in this
+            implementation.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.RegExpException.ErrorType.INVALID_REPEAT_COUNT">
+            The invalid repeat count error constant. This error is
+            used when a repetition count of zero is specified, or
+            when the minimum exceeds the maximum.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.RepeatElement">
+            A regular expression element repeater. The element repeats the
+            matches from a specified element, attempting to reach the
+            maximum repetition count.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RE.StringElement">
+            A regular expression string element. This element only matches
+            an exact string. Once created, the string element is immutable.
+        </member>
+        <member name="M:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Analyzer.Reset">
+             <summary>
+             Resets this analyzer when the parser is reset for another
+            input stream.The default implementation of this method does
+             nothing.
+             </summary>
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Node">
+            An abstract parse tree node. This class is inherited by all
+            nodes in the parse tree, i.e. by the token and production
+            classes.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException">
+            A parse exception.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType.INTERNAL">
+            The internal error type is only used to signal an error
+            that is a result of a bug in the parser or tokenizer
+            code.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType.IO">
+            The I/O error type is used for stream I/O errors.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType.UNEXPECTED_EOF">
+            The unexpected end of file error type is used when end
+            of file is encountered instead of a valid token.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType.UNEXPECTED_CHAR">
+            The unexpected character error type is used when a
+            character is read that isn't handled by one of the
+            token patterns.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType.UNEXPECTED_TOKEN">
+            The unexpected token error type is used when another
+            token than the expected one is encountered.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType.INVALID_TOKEN">
+            The invalid token error type is used when a token
+            pattern with an error message is matched. The
+            additional information provided should contain the
+            error message.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType.ANALYSIS">
+            The analysis error type is used when an error is
+            encountered in the analysis. The additional information
+            provided should contain the error message.
+        </member>
+        <member name="M:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.#ctor(Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType,System.String,System.Int32,System.Int32)">
+            <summary>
+            Creates a new parse exception.
+            </summary>
+            <param name="type"></param>
+            <param name="info"></param>
+            <param name="line"></param>
+            <param name="column"></param>
+        </member>
+        <member name="M:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.#ctor(Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParseException.ErrorType,System.String,System.Collections.ArrayList,System.Int32,System.Int32)">
+            <summary>
+            Creates a new parse exception. This constructor is only
+            used to supply the detailed information array, which is
+            only used for expected token errors. The list then contains
+            descriptions of the expected tokens.
+            </summary>
+            <param name="type"></param>
+            <param name="info"></param>
+            <param name="details"></param>
+            <param name="line"></param>
+            <param name="column"></param>
+        </member>
+        <member name="M:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Parser.#ctor(System.IO.TextReader)">
+            <summary>
+            Creates a new parser.
+            </summary>
+            <param name="input"></param>
+        </member>
+        <member name="M:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Parser.#ctor(System.IO.TextReader,Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Analyzer)">
+            <summary>
+            Creates a new parser.
+            </summary>
+            <param name="input"></param>
+            <param name="analyzer"></param>
+        </member>
+        <member name="M:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Parser.#ctor(Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Tokenizer)">
+             Creates a new parser.
+            
+             @param tokenizer       the tokenizer to use
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParserCreationException">
+            A parser creation exception. This exception is used for signalling
+            an error in the token or production patterns, making it impossible
+            to create a working parser or tokenizer.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParserCreationException.ErrorType">
+            The error type enumeration.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParserCreationException.ErrorType.INTERNAL">
+            The internal error type is only used to signal an
+            error that is a result of a bug in the parser or
+            tokenizer code.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParserCreationException.ErrorType.INVALID_PARSER">
+            The invalid parser error type is used when the parser
+            as such is invalid. This error is typically caused by
+            using a parser without any patterns.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParserCreationException.ErrorType.INVALID_TOKEN">
+            The invalid token error type is used when a token
+            pattern is erroneous. This error is typically caused
+            by an invalid pattern type or an erroneous regular
+            expression.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParserCreationException.ErrorType.INVALID_PRODUCTION">
+            The invalid production error type is used when a
+            production pattern is erroneous. This error is
+            typically caused by referencing undeclared productions,
+            or violating some other production pattern constraint.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParserCreationException.ErrorType.INFINITE_LOOP">
+            The infinite loop error type is used when an infinite
+            loop has been detected in the grammar. One of the
+            productions in the loop will be reported.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ParserCreationException.ErrorType.INHERENT_AMBIGUITY">
+            The inherent ambiguity error type is used when the set
+            of production patterns (i.e. the grammar) contains
+            ambiguities that cannot be resolved.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Production">
+            A production node. This class represents a grammar production
+            (i.e. a list of child nodes) in a parse tree. The productions
+            are created by a parser, that adds children a according to a
+            set of production patterns (i.e. grammar rules).
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ProductionPattern">
+            A production pattern. This class represents a set of production
+            alternatives that together forms a single production. A
+            production pattern is identified by an integer id and a name,
+            both provided upon creation. The pattern id is used for
+            referencing the production pattern from production pattern
+            elements.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ProductionPatternAlternative">
+            A production pattern alternative. This class represents a list of
+            production pattern elements. In order to provide productions that
+            cannot be represented with the element occurance counters, multiple
+            alternatives must be created and added to the same production
+            pattern. A production pattern alternative is always contained
+            within a production pattern.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ProductionPatternElement">
+            A production pattern element. This class represents a reference to
+            either a token or a production. Each element also contains minimum
+            and maximum occurence counters, controlling the number of
+            repetitions allowed. A production pattern element is always
+            contained within a production pattern rule.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.ReaderBuffer">
+            A character buffer that automatically reads from an input source
+            stream when needed. This class keeps track of the current position
+            in the buffer and its line and column number in the original input
+            source. It allows unlimited look-ahead of characters in the input,
+            reading and buffering the required data internally. As the
+            position is advanced, the buffer content prior to the current
+            position is subject to removal to make space for reading new
+            content. A few characters before the current position are always
+            kept to enable boundary condition checks.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.RecursiveDescentParser">
+            A recursive descent parser. This parser handles LL(n) grammars,
+            selecting the appropriate pattern to parse based on the next few
+            tokens. The parser is more efficient the fewer look-ahead tokens
+            that is has to consider.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Token">
+            A token node. This class represents a token (i.e. a set of adjacent
+            characters) in a parse tree. The tokens are created by a tokenizer,
+            that groups characters together into tokens according to a set of
+            token patterns.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.Tokenizer">
+            A character stream tokenizer. This class groups the characters read
+            from the stream together into tokens ("words"). The grouping is
+            controlled by token patterns that contain either a fixed string to
+            search for, or a regular expression. If the stream of characters
+            don't match any of the token patterns, a parse exception is thrown.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.TokenMatch">
+            The token match status. This class contains logic to ensure that
+            only the longest match is considered. It also prefers lower token
+            pattern identifiers if two matches have the same length.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.TokenNFA">
+            A non-deterministic finite state automaton (NFA) for matching
+            tokens. It supports both fixed strings and simple regular
+            expressions, but should perform similar to a DFA due to highly
+            optimized data structures and tuning. The memory footprint during
+            matching should be near zero, since no heap memory is allocated
+            unless the pre-allocated queues need to be enlarged. The NFA also
+            does not use recursion, but iterates in a loop instead.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFAState">
+            An NFA state. The NFA consists of a series of states, each
+            having zero or more transitions to other states.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFATransition">
+            An NFA state transition. A transition checks a single
+            character of input an determines if it is a match. If a match
+            is encountered, the NFA should move forward to the transition
+            state.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFAEpsilonTransition">
+            The special epsilon transition. This transition matches the
+            empty input, i.e. it is an automatic transition that doesn't
+            read any input. As such, it returns false in the match method
+            and is handled specially everywhere.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFACharTransition">
+            A single character match transition.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFACharRangeTransition">
+            A character range match transition. Used for user-defined
+            character sets in regular expressions.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFADotTransition">
+            The dot ('.') character set transition. This transition
+            matches a single character that is not equal to a newline
+            character.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFADigitTransition">
+            The digit character set transition. This transition matches a
+            single numeric character.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFANonDigitTransition">
+            The non-digit character set transition. This transition
+            matches a single non-numeric character.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFAWhitespaceTransition">
+            The whitespace character set transition. This transition
+            matches a single whitespace character.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFANonWhitespaceTransition">
+            The non-whitespace character set transition. This transition
+            matches a single non-whitespace character.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFAWordTransition">
+            The word character set transition. This transition matches a
+            single word character.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFANonWordTransition">
+            The non-word character set transition. This transition matches
+            a single non-word character.
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.NFAStateQueue" -->
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.TokenPattern">
+                 * A token pattern. This class contains the definition of a token
+                 * (i.e. it's pattern), and allows testing a string against this
+                 * pattern. A token pattern is uniquely identified by an integer id,
+                 * that must be provided upon creation.
+                 *
+                
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.TokenPattern.PatternType.STRING">
+            The string pattern type is used for tokens that only
+            match an exact string.
+        </member>
+        <member name="F:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.TokenPattern.PatternType.REGEXP">
+            The regular expression pattern type is used for tokens
+            that match a regular expression.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.TokenRegExpParser">
+            A regular expression parser. The parser creates an NFA for the
+            regular expression having a single start and acceptance states.
+        </member>
+        <member name="T:Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime.TokenStringDFA">
+            A deterministic finite state automaton for matching exact strings.
+            It uses a sorted binary tree representation of the state
+            transitions in order to enable quick matches with a minimal memory
+            footprint. It only supports a single character transition between
+            states, but may be run in an all case-insensitive mode.
+        </member>
+        <member name="T:Flee.PublicTypes.ExpressionCompileException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Flee.PublicTypes.VariableCollection">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Flee.Resources.CompileErrors">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.AmbiguousCallOfFunction">
+            <summary>
+              Looks up a localized string similar to Ambiguous call of function &apos;{0}({1})&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.AmbiguousOverloadedOperator">
+            <summary>
+              Looks up a localized string similar to Ambiguous overloaded operator (&apos;{2}&apos;) in types &apos;{0}&apos; and &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.ANALYSIS">
+            <summary>
+              Looks up a localized string similar to Analysis: {0}.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.ArrayIndexersMustBeOfType">
+            <summary>
+              Looks up a localized string similar to Array indexers must be of type &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.CalcEngineDoesNotContainAtom">
+            <summary>
+              Looks up a localized string similar to The calculation engine does not contain the atom &apos;${0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.CannotConvertType">
+            <summary>
+              Looks up a localized string similar to Cannot convert type &apos;{0}&apos; to &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.CannotConvertTypeToExpressionResult">
+            <summary>
+              Looks up a localized string similar to Cannot convert type &apos;{0}&apos; to expression result of &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.CannotParseType">
+            <summary>
+              Looks up a localized string similar to String was not recognized as a valid &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.CannotReferenceCalcEngineAtomWithoutCalcEngine">
+            <summary>
+              Looks up a localized string similar to Cannot reference a calculation engine atom without a calculation engine.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.CouldNotResolveType">
+            <summary>
+              Looks up a localized string similar to Could not resolve type of &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.FirstArgNotBoolean">
+            <summary>
+              Looks up a localized string similar to First argument does not evaluate to a Boolean.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.FunctionHasNoReturnValue">
+            <summary>
+              Looks up a localized string similar to Function &apos;{0}&apos; does not return a value.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.IdentifierIsAmbiguous">
+            <summary>
+              Looks up a localized string similar to The field/property/variable name &apos;{0}&apos; is ambiguous.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.IdentifierIsAmbiguousOnType">
+            <summary>
+              Looks up a localized string similar to The field/property/variable name &apos;{0}&apos; is ambiguous on type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.INTERNAL_ERROR">
+            <summary>
+              Looks up a localized string similar to Internal error: {0}.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.INVALID_TOKEN">
+            <summary>
+              Looks up a localized string similar to Invalid Token: {0}.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.IO">
+            <summary>
+              Looks up a localized string similar to I/O error: {0}.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.LineColumn">
+            <summary>
+              Looks up a localized string similar to Line: {0}, Column: {1}.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.MultiArrayIndexNotSupported">
+            <summary>
+              Looks up a localized string similar to Multiple array indexes are not supported.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.NamespaceCannotBeUsedAsType">
+            <summary>
+              Looks up a localized string similar to Namespace &apos;{0}&apos; cannot be used as a type.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.NeitherArgIsConvertibleToTheOther">
+            <summary>
+              Looks up a localized string similar to Cannot determine result type of expression; neither the True ({0}) or False ({1}) arguments are convertible to one another.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.NoAccessibleMatches">
+            <summary>
+              Looks up a localized string similar to Could not find any accessible matches for &apos;{0}({1})&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.NoAccessibleMatchesOnType">
+            <summary>
+              Looks up a localized string similar to Could not find any accessible matches for &apos;{0}({1})&apos; on type &apos;{2}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.NoIdentifierWithName">
+            <summary>
+              Looks up a localized string similar to Could not find a field/property/variable with the name &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.NoIdentifierWithNameOnType">
+            <summary>
+              Looks up a localized string similar to Could not find a field/property/variable with the name &apos;{0}&apos; on the type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.OperandNotConvertibleToCollectionType">
+            <summary>
+              Looks up a localized string similar to Operand type of &apos;{0}&apos; is not convertible to collection type of &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.OperationNotDefinedForType">
+            <summary>
+              Looks up a localized string similar to Operation not defined for type &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.OperationNotDefinedForTypes">
+            <summary>
+              Looks up a localized string similar to Operation &apos;{0}&apos; is not defined for types &apos;{1}&apos; and &apos;{2}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.ReferenceToNonSharedMemberRequiresObjectReference">
+            <summary>
+              Looks up a localized string similar to Reference to a non-shared member &apos;{0}&apos; requires an object reference.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.SearchArgIsNotKnownCollectionType">
+            <summary>
+              Looks up a localized string similar to Search argument type &apos;{0}&apos; is not a known collection type.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.StaticMemberCannotBeAccessedWithInstanceReference">
+            <summary>
+              Looks up a localized string similar to Static member &apos;{0}&apos; cannot be accessed with an instance reference; qualify it with a type name instead.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.SyntaxError">
+            <summary>
+              Looks up a localized string similar to SyntaxError.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.TypeCannotBeUsedAsAnExpression">
+            <summary>
+              Looks up a localized string similar to &apos;{0}&apos; is a type and cannot be used as an expression.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.TypeNotArrayAndHasNoIndexerOfType">
+            <summary>
+              Looks up a localized string similar to Type &apos;{0}&apos; is not an array and does not have an indexer which accepts &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.UndefinedFunction">
+            <summary>
+              Looks up a localized string similar to Could find not function &apos;{0}({1})&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.UndefinedFunctionOnType">
+            <summary>
+              Looks up a localized string similar to Could find not function &apos;{0}({1})&apos; on type &apos;{2}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.UNEXPECTED_CHAR">
+            <summary>
+              Looks up a localized string similar to Unexpected character: {0}.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.UNEXPECTED_EOF">
+            <summary>
+              Looks up a localized string similar to Unexpected end of file.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.UNEXPECTED_TOKEN">
+            <summary>
+              Looks up a localized string similar to Unexpected token {0}; expected one of {1}.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.CompileErrors.ValueNotRepresentableInType">
+            <summary>
+              Looks up a localized string similar to &apos;{0}&apos; not representable in type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="T:Flee.Resources.ElementNames">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.AndOrElement">
+            <summary>
+              Looks up a localized string similar to AndOrElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.ArithmeticElement">
+            <summary>
+              Looks up a localized string similar to ArithmeticElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.BooleanLiteralElement">
+            <summary>
+              Looks up a localized string similar to BooleanLiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.CalcEngineAtom">
+            <summary>
+              Looks up a localized string similar to CalcEngineAtom.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.CastElement">
+            <summary>
+              Looks up a localized string similar to CastElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.CharLiteralElement">
+            <summary>
+              Looks up a localized string similar to CharLiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.CompareElement">
+            <summary>
+              Looks up a localized string similar to CompareElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.ConditionalElement">
+            <summary>
+              Looks up a localized string similar to ConditionalElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.DateTimeLiteralElement">
+            <summary>
+              Looks up a localized string similar to DateTimeLiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.DoubleLiteralElement">
+            <summary>
+              Looks up a localized string similar to DoubleLiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.ExpressionMemberElement">
+            <summary>
+              Looks up a localized string similar to ExpressionMemberElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.FunctionCallElement">
+            <summary>
+              Looks up a localized string similar to FunctionCallElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.IdentifierElement">
+            <summary>
+              Looks up a localized string similar to IdentifierElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.IndexerElement">
+            <summary>
+              Looks up a localized string similar to IndexerElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.InElement">
+            <summary>
+              Looks up a localized string similar to InElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.Int32Literal">
+            <summary>
+              Looks up a localized string similar to Int32Literal.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.Int64LiteralElement">
+            <summary>
+              Looks up a localized string similar to Int64LiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.InvocationListElement">
+            <summary>
+              Looks up a localized string similar to InvocationListElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.NegateElement">
+            <summary>
+              Looks up a localized string similar to NegateElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.NotElement">
+            <summary>
+              Looks up a localized string similar to NotElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.NullLiteralElement">
+            <summary>
+              Looks up a localized string similar to NullLiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.RootExpressionElement">
+            <summary>
+              Looks up a localized string similar to RootExpressionElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.ShiftElement">
+            <summary>
+              Looks up a localized string similar to ShiftElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.SingleLiteralElement">
+            <summary>
+              Looks up a localized string similar to SingleLiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.StringLiteralElement">
+            <summary>
+              Looks up a localized string similar to StringLiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.TimeSpanLiteralElement">
+            <summary>
+              Looks up a localized string similar to TimeSpanLiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.UInt32LiteralElement">
+            <summary>
+              Looks up a localized string similar to UInt32LiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.UInt64LiteralElement">
+            <summary>
+              Looks up a localized string similar to UInt64LiteralElement.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.ElementNames.XorElement">
+            <summary>
+              Looks up a localized string similar to XorElement.
+            </summary>
+        </member>
+        <member name="T:Flee.Resources.GeneralErrors">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.CannotDetermineNewVariableType">
+            <summary>
+              Looks up a localized string similar to Cannot determine type of new variable.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.CouldNotFindPublicStaticMethodOnType">
+            <summary>
+              Looks up a localized string similar to Could not find a public and static method &apos;{0}&apos; on type &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.InvalidNamespaceName">
+            <summary>
+              Looks up a localized string similar to Invalid namespace name.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.InvalidVariableName">
+            <summary>
+              Looks up a localized string similar to &apos;{0}&apos; is not a valid variable name.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.NewOwnerTypeNotAssignableToCurrentOwner">
+            <summary>
+              Looks up a localized string similar to The type of the new owner is not assignable to the current owner type.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.OnlyPublicStaticMethodsCanBeImported">
+            <summary>
+              Looks up a localized string similar to Only public and static methods can be imported.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.TypeNotAccessibleToExpression">
+            <summary>
+              Looks up a localized string similar to Type &apos;{0}&apos; is not accessible to the expression.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.UndefinedVariable">
+            <summary>
+              Looks up a localized string similar to Undefined variable &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.VariableValueNotAssignableToType">
+            <summary>
+              Looks up a localized string similar to Value type of &apos;{0}&apos; is not assignable to required type of &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Flee.Resources.GeneralErrors.VariableWithNameAlreadyDefined">
+            <summary>
+              Looks up a localized string similar to A variable with name &apos;{0}&apos; is already defined.
+            </summary>
+        </member>
+        <member name="T:Flee.Resources.CompileErrorResourceKeys">
+            <summary>
+            Resource keys for compile error messages
+            </summary>
+            <remarks></remarks>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,12 @@
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\bin\Debug\netstandard2.0\Flee.NetCore.deps.json
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\bin\Debug\netstandard2.0\Flee.NetCore.dll
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\bin\Debug\netstandard2.0\Flee.NetCore.pdb
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.Resources.CompileErrors.resources
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.Resources.ElementNames.resources
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.Resources.GeneralErrors.resources
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.NetCore.csproj.GenerateResource.Cache
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.NetCore.csproj.CoreCompileInputs.cache
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.NetCore.AssemblyInfo.cs
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.NetCore.dll
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.NetCore.pdb
+C:\Users\02483878\Source\Repos\Flee\src\Flee.NetCore\obj\Debug\netstandard2.0\Flee.NetCore.csprojResolveAssemblyReference.cache

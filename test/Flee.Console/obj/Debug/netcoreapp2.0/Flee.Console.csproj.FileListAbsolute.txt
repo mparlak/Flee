@@ -1,0 +1,10 @@
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\bin\Debug\netcoreapp2.0\Flee.Console.deps.json
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\bin\Debug\netcoreapp2.0\Flee.Console.runtimeconfig.json
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\bin\Debug\netcoreapp2.0\Flee.Console.runtimeconfig.dev.json
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\bin\Debug\netcoreapp2.0\Flee.Console.dll
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\bin\Debug\netcoreapp2.0\Flee.Console.pdb
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Flee.Console.csproj.CoreCompileInputs.cache
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Flee.Console.AssemblyInfo.cs
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Flee.Console.dll
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Flee.Console.pdb
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Flee.Console.csprojResolveAssemblyReference.cache
