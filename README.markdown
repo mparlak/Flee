@@ -28,8 +28,5 @@ Flee is an expression parser and evaluator for the .NET framework. It allows you
 * Generated IL can be saved to an assembly and viewed with a disassembler
 
 ## More information
-* Examples to learn how to create and evaluate expressions.
-* Language Reference for information on the expression language.
-* Frequently Asked Questions about using Flee.
-* Article on CodeProject for a more detailed overview.
+* [Examples](https://github.com/mparlak/Flee/wiki/Examples) to learn how to create and evaluate expressions.
 
