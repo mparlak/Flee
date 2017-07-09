@@ -8,3 +8,5 @@ C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Fl
 C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Flee.Console.dll
 C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Flee.Console.pdb
 C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\obj\Debug\netcoreapp2.0\Flee.Console.csprojResolveAssemblyReference.cache
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\bin\Debug\netcoreapp2.0\Flee.NetCore.dll
+C:\Users\02483878\Source\Repos\Flee\test\Flee.Console\bin\Debug\netcoreapp2.0\Flee.NetCore.pdb

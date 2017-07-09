@@ -2,29 +2,6 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v2.0": {
-      "Flee/1.0.1": {
-        "type": "package",
-        "dependencies": {
-          "System.ComponentModel": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Reflection.Emit": "4.3.0",
-          "System.Reflection.Emit.ILGeneration": "4.3.0",
-          "System.Reflection.Emit.Lightweight": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/Flee.NetCore.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Flee.NetCore.dll": {}
-        },
-        "contentFiles": {
-          "contentFiles/any/netstandard2.0/Resources/DocComments.xml": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          }
-        }
-      },
       "Microsoft.NETCore.App/2.0.0-preview1-002111-00": {
         "type": "package",
         "dependencies": {
@@ -375,22 +352,27 @@
         "runtime": {
           "lib/net45/_._": {}
         }
+      },
+      "Flee/1.0.2": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "System.ComponentModel": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Emit": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Reflection.Emit.Lightweight": "4.3.0"
+        },
+        "compile": {
+          "bin/placeholder/Flee.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Flee.dll": {}
+        }
       }
     }
   },
   "libraries": {
-    "Flee/1.0.1": {
-      "sha512": "Na8UexUdgqXRViUlnQTAR/h7rv87G3LPNuTJQ4aPJj0Nrtwq47fVtm0zduCxxpLZ0JQksDvkE4Itf9PErEuQoA==",
-      "type": "package",
-      "path": "flee/1.0.1",
-      "files": [
-        "content/Resources/DocComments.xml",
-        "contentFiles/any/netstandard2.0/Resources/DocComments.xml",
-        "flee.1.0.1.nupkg.sha512",
-        "flee.nuspec",
-        "lib/netstandard2.0/Flee.NetCore.dll"
-      ]
-    },
     "Microsoft.NETCore.App/2.0.0-preview1-002111-00": {
       "sha512": "eTcpMPEYWjOAvgrvHSvZdYb8Z8zma2gCPYXGX9QHBHiuQ7igGlGpPc9U5g91zgshgT9RNWkH6lxJj5n8nMC86g==",
       "type": "package",
@@ -1372,11 +1354,16 @@
         "ref/xamarintvos10/_._",
         "ref/xamarinwatchos10/_._"
       ]
+    },
+    "Flee/1.0.2": {
+      "type": "project",
+      "path": "../../src/Flee.NetCore/Flee.NetCore.csproj",
+      "msbuildProject": "../../src/Flee.NetCore/Flee.NetCore.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
-      "Flee >= 1.0.1",
+      "Flee >= 1.0.2",
       "Microsoft.NETCore.App >= 2.0.0-preview1-002111-00"
     ]
   },
@@ -1396,7 +1383,11 @@
       ],
       "frameworks": {
         "netcoreapp2.0": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\02483878\\Source\\Repos\\Flee\\src\\Flee.NetCore\\Flee.NetCore.csproj": {
+              "projectPath": "C:\\Users\\02483878\\Source\\Repos\\Flee\\src\\Flee.NetCore\\Flee.NetCore.csproj"
+            }
+          }
         }
       }
     },
@@ -1407,10 +1398,6 @@
             "target": "Package",
             "version": "2.0.0-preview1-002111-00",
             "autoReferenced": true
-          },
-          "Flee": {
-            "target": "Package",
-            "version": "1.0.1"
           }
         },
         "imports": [

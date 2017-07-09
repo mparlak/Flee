@@ -1,6 +1,8 @@
 ﻿using Flee.CalcEngine.PublicTypes;
 using Flee.PublicTypes;
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Flee.Console
 {
@@ -8,25 +10,24 @@ namespace Flee.Console
     {
         static void Main(string[] args)
         {
-            var ce = new CalculationEngine();
-            var context = new ExpressionContext();
-            var variables = context.Variables;
+            //Sample Scenario 1
+            ExpressionContext context = new ExpressionContext();
+            VariableCollection variables = context.Variables;
+            variables.Add("a", 1);
+            variables.Add("b", 1);
 
-            variables.Add("x", 100);
-            ce.Add("a", "x * 2", context);
-            variables.Add("y", 1);
-            ce.Add("b", "a + y", context);
-            ce.Add("c", "b * 2", context);
-            ce.Recalculate("a");
+            IGenericExpression<bool> e = context.CompileGeneric<bool>("a=1 AND b=0");
+            bool result = e.Evaluate();
 
-            var result = ce.GetResult<int>("c");
-            System.Console.WriteLine("Result : " + (result == ((100 * 2) + 1) * 2 ? "Success" : "Fail"));
+            //Sample Scenario 2
+            ExpressionContext context2 = new ExpressionContext();
+            VariableCollection variables2 = context2.Variables;
+            variables2.Add("a", 100);
+            variables2.Add("b", 1);
+            variables2.Add("c", 24);
 
-            variables.Remove("x");
-            variables.Add("x", 345);
-            ce.Recalculate("a");
-            result = ce.GetResult<int>("c");
-            System.Console.WriteLine("Result : " + (result == ((345 * 2) + 1) * 2 ? "Success" : "Fail"));
+            IGenericExpression<bool> ge = context2.CompileGeneric<bool>("(a = 100 OR b > 0) AND c <> 2");
+            bool result2 = ge.Evaluate();
 
             System.Console.ReadKey();
         }

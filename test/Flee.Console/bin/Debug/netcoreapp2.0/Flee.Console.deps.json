@@ -1,29 +1,17 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "d8d414142fce7dcea84bd7b27fec0bfb5ec1ddc5"
+    "signature": "83a7a2773e5efde45265dee36f8895e59246db1c"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.0": {
       "Flee.Console/1.0.0": {
         "dependencies": {
-          "Flee": "1.0.1"
+          "Flee": "1.0.2"
         },
         "runtime": {
           "Flee.Console.dll": {}
-        }
-      },
-      "Flee/1.0.1": {
-        "dependencies": {
-          "System.ComponentModel": "4.3.0",
-          "System.Reflection": "4.3.0",
-          "System.Reflection.Emit": "4.3.0",
-          "System.Reflection.Emit.ILGeneration": "4.3.0",
-          "System.Reflection.Emit.Lightweight": "4.3.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Flee.NetCore.dll": {}
         }
       },
       "Microsoft.NETCore.Targets/1.1.0": {},
@@ -94,6 +82,18 @@
           "Microsoft.NETCore.Targets": "1.1.0",
           "System.Runtime": "4.3.0"
         }
+      },
+      "Flee/1.0.2": {
+        "dependencies": {
+          "System.ComponentModel": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Emit": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.3.0",
+          "System.Reflection.Emit.Lightweight": "4.3.0"
+        },
+        "runtime": {
+          "Flee.NetCore.dll": {}
+        }
       }
     }
   },
@@ -102,13 +102,6 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
-    },
-    "Flee/1.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Na8UexUdgqXRViUlnQTAR/h7rv87G3LPNuTJQ4aPJj0Nrtwq47fVtm0zduCxxpLZ0JQksDvkE4Itf9PErEuQoA==",
-      "path": "flee/1.0.1",
-      "hashPath": "flee.1.0.1.nupkg.sha512"
     },
     "Microsoft.NETCore.Targets/1.1.0": {
       "type": "package",
@@ -186,6 +179,11 @@
       "sha512": "sha512-LbSxKEdOUhVe8BezB/9uOGGppt+nZf6e1VFyw6v3DN6lqitm0OSn2uXMOdtP0M3W4iMcqcivm2J6UgqiwwnXiA==",
       "path": "system.threading.tasks/4.3.0",
       "hashPath": "system.threading.tasks.4.3.0.nupkg.sha512"
+    },
+    "Flee/1.0.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

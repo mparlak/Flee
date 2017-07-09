@@ -5,7 +5,7 @@
     <RootNamespace>Flee</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Flee</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Muhammet Parlak</Authors>
     <Company />
     <Product>Flee</Product>
@@ -13,7 +13,7 @@
     <PackageLicenseUrl>https://github.com/mparlak/Flee</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/mparlak/Flee</PackageProjectUrl>
     <PackageIconUrl>https://github.com/mparlak/Flee</PackageIconUrl>
-    <PackageReleaseNotes>Flee upgrade .Net Core 2.0</PackageReleaseNotes>
+    <PackageReleaseNotes>-Boolean Expressions bug fixed.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

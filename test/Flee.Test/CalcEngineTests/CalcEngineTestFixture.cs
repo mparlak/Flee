@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Flee.CalcEngine.PublicTypes;
 using Flee.PublicTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -180,6 +181,40 @@ namespace Flee.Test.CalcEngineTests
             variables.Add("y", 1);
             ce.Add("b", "a + y + b", context);
             ce.Recalculate("a");
+        }
+
+        [Test]
+        public void Test_Boolean_Expression()
+        {
+            string expression = "a AND NOT b AND NOT c AND d";
+            Dictionary<string, object> expressionVariables = new Dictionary<string, object>();
+            expressionVariables.Add("a", 1);
+            expressionVariables.Add("b", 0);
+            expressionVariables.Add("c", 0);
+            expressionVariables.Add("d", 1);
+
+            var context = new ExpressionContext();
+            var vars = context.Variables;
+            foreach (var expressionVariable in expressionVariables.Keys)
+                vars.Add(expressionVariable, expressionVariables[expressionVariable]);
+            IDynamicExpression dynamicExpression = context.CompileDynamic(expression);
+            foreach (var expressionVariable in expressionVariables.Keys)
+                vars[expressionVariable] = expressionVariables[expressionVariable];
+            var a = dynamicExpression.Evaluate();
+
+
+
+
+            //ExpressionContext context = new ExpressionContext();
+            //VariableCollection variables = context.Variables;
+            ////variables.Add("a", 1);
+            ////variables.Add("b", 0);
+            ////IGenericExpression<bool> e = context.CompileGeneric<bool>("a=1 OR b=0");
+
+            //IGenericExpression<bool> e = context.CompileGeneric<bool>("false OR false");
+
+            //bool result = e.Evaluate();
+            //Assert.AreEqual(false, result);
         }
     }
 }

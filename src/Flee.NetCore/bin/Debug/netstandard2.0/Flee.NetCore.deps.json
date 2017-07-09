@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "Flee.NetCore/1.0.1": {
+      "Flee.NetCore/1.0.2": {
         "dependencies": {
           "NETStandard.Library": "2.0.0-preview1-25301-01",
           "System.ComponentModel": "4.3.0",
@@ -118,7 +118,7 @@
     }
   },
   "libraries": {
-    "Flee.NetCore/1.0.1": {
+    "Flee.NetCore/1.0.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

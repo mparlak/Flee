@@ -267,7 +267,7 @@ namespace Flee.ExpressionElements.LogicalBitwise
 
         private void PopRightChild(Stack operands, Stack operators)
         {
-            AndOrElement andOrChild = (AndOrElement)MyRightChild;
+            AndOrElement andOrChild = MyRightChild as AndOrElement;
 
             // What kind of child do we have?
             if ((andOrChild != null))
@@ -395,7 +395,7 @@ namespace Flee.ExpressionElements.LogicalBitwise
         private void PopulateData(ShortCircuitInfo info)
         {
             // Is our right child a leaf or another And/Or expression?
-            AndOrElement andOrChild = (AndOrElement)MyRightChild;
+            AndOrElement andOrChild = MyRightChild as AndOrElement;
             if (andOrChild == null)
             {
                 // Leaf so push it on the stack
