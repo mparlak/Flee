@@ -1,4 +1,4 @@
-# Flee
+# Flee (Supports .Net Core 2.0)
  Fast Lightweight Expression Evaluator.
  Convert this project vb.net to c#.
  
