@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Flee</id>
+    <title>Flee</title>
+    <version>1.0.3</version>
+    <authors>Muhammet Parlak</authors>
+    <owners>Muhammet Parlak</owners>
+    <licenseUrl>https://github.com/mparlak/Flee</licenseUrl>
+    <projectUrl>https://github.com/mparlak/Flee</projectUrl>
+    <iconUrl>https://github.com/mparlak/Flee</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Flee - Fast Lightweight Expression Evaluator</description>
+    <copyright>Copyright 2017</copyright>
+    <tags>flee,expression evaluator,Expression Evaluator for c#</tags>
+    <releaseNotes>
+      1.0.3
+      • Fixed – The type 'Object' is defined in an assembly that is not referenced. You must add a reference to assembly netstandard 2.0
+    </releaseNotes>
+  </metadata>
+  <files>
+    <file src="lib\net45\Flee.dll" target="lib\net45" />
+    <file src="lib\net461\Flee.dll" target="lib\net461" />
+    <file src="lib\netstandard20\Flee.NetStandard.dll" target="lib\netstandard20" />
+  </files>
+</package>
