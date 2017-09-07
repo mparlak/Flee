@@ -301,7 +301,7 @@ namespace Flee.ExpressionElements.LogicalBitwise
                 andOrChild.Pop(operands, operators);
             }
 
-            andOrChild = (AndOrElement)MyRightChild;
+            andOrChild = MyRightChild as AndOrElement;
 
             if (andOrChild == null)
             {
