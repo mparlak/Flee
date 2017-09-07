@@ -410,7 +410,7 @@ namespace Flee.Parsing
             return node;
         }
 
-        public Node ExitTimeSpan(Token node)
+        public override Node ExitTimespan(Token node)
         {
             string image = node.Image.Substring(2, node.Image.Length - 3);
             TimeSpanLiteralElement element = new TimeSpanLiteralElement(image);
