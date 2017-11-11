@@ -338,11 +338,7 @@ namespace Flee.PublicTypes
         public bool TryGetValue(string key, out object value)
         {
             IVariable v = this.GetVariable(key, false);
-            if ((v != null))
-            {
-                value = v.ValueAsObject;
-            }
-            value = null;
+            value = v?.ValueAsObject;
             return v != null;
         }
 
