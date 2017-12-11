@@ -1,27 +1,26 @@
-﻿
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Reflection;
-using System.ComponentModel;
-using Flee.InternalTypes;
-using Flee.PublicTypes;
+﻿using Flee.InternalTypes;
 using Flee.Resources;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Flee.PublicTypes
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed class VariableCollection : IDictionary<string, object>
     {
         private IDictionary<string, IVariable> _myVariables;
         private readonly ExpressionContext _myContext;
+
         public event EventHandler<ResolveVariableTypeEventArgs> ResolveVariableType;
+
         public event EventHandler<ResolveVariableValueEventArgs> ResolveVariableValue;
+
         public event EventHandler<ResolveFunctionEventArgs> ResolveFunction;
+
         public event EventHandler<InvokeFunctionEventArgs> InvokeFunction;
 
         internal VariableCollection(ExpressionContext context)
@@ -32,6 +31,7 @@ namespace Flee.PublicTypes
         }
 
         #region "Methods - Non Public"
+
         private void HookOptions()
         {
             _myContext.Options.CaseSensitiveChanged += OnOptionsCaseSensitiveChanged;
@@ -118,10 +118,7 @@ namespace Flee.PublicTypes
                 options = expression.Context.Options;
                 // Get its result type
                 variableValueType = options.ResultType;
-            }
 
-            if (expression != null)
-            {
                 // Create a variable that wraps the expression
 
                 if (options.IsGeneric == false)
@@ -215,9 +212,11 @@ namespace Flee.PublicTypes
 
             return dict;
         }
-        #endregion
+
+        #endregion "Methods - Non Public"
 
         #region "Methods - Public"
+
         public Type GetVariableType(string name)
         {
             IVariable v = this.GetVariable(name, true);
@@ -231,18 +230,15 @@ namespace Flee.PublicTypes
 
         public T GetVariableValueInternal<T>(string name)
         {
-            //TODO:@muhammet burada vb de ref vardı c# karşılık yap.
-            GenericVariable<T> result = new GenericVariable<T>();
-            if (_myVariables.ContainsKey(name))
+            if (_myVariables.TryGetValue(name, out IVariable variable))
             {
-                result.ValueAsObject = _myVariables[name].ValueAsObject;
-                return (T)result.GetValue();
+                if (variable is IGenericVariable<T> generic)
+                {
+                    return (T)generic.GetValue();
+                }
             }
-            //if (MyVariables.TryGetValue(name, out v))
-            //{
-            //    return v.GetValue();
-            //}
 
+            GenericVariable<T> result = new GenericVariable<T>();
             GenericVariable<T> vTemp = new GenericVariable<T>();
             ResolveVariableValueEventArgs args = new ResolveVariableValueEventArgs(name, typeof(T));
             ResolveVariableValue?.Invoke(this, args);
@@ -276,13 +272,16 @@ namespace Flee.PublicTypes
 
             return ReturnGenericValue<T>(result);
         }
-        #endregion
+
+        #endregion "Methods - Public"
 
         #region "IDictionary Implementation"
+
         private void Add1(System.Collections.Generic.KeyValuePair<string, object> item)
         {
             this.Add(item.Key, item.Value);
         }
+
         void System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>.Add(System.Collections.Generic.KeyValuePair<string, object> item)
         {
             Add1(item);
@@ -297,6 +296,7 @@ namespace Flee.PublicTypes
         {
             return this.ContainsKey(item.Key);
         }
+
         bool System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>.Contains(System.Collections.Generic.KeyValuePair<string, object> item)
         {
             return Contains1(item);
@@ -313,6 +313,7 @@ namespace Flee.PublicTypes
         {
             return this.Remove(item.Key);
         }
+
         bool System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>.Remove(System.Collections.Generic.KeyValuePair<string, object> item)
         {
             return Remove1(item);
@@ -352,6 +353,7 @@ namespace Flee.PublicTypes
         {
             return this.GetEnumerator();
         }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator1();
@@ -398,6 +400,7 @@ namespace Flee.PublicTypes
         {
             CopyTo(array, arrayIndex);
         }
-        #endregion
+
+        #endregion "IDictionary Implementation"
     }
 }
