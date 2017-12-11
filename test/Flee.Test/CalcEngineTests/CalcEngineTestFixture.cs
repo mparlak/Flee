@@ -97,7 +97,7 @@ namespace Flee.Test.CalcEngineTests
             ce.Add("x", "a <> 100", context);
             ce.Recalculate("x");
             var result = ce.GetResult<bool>("x");
-            Assert.AreEqual(420, result);
+            Assert.IsTrue(result);
         }
 
         [Test]
