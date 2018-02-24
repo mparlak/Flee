@@ -29,5 +29,15 @@ namespace ExpressionBuildingTest
 
             Console.WriteLine(e.Evaluate());
         }
+
+        [TestMethod]
+        public void NullCheck()
+        {
+            ExpressionContext context = new ExpressionContext();
+            context.Variables.Add("a", "stringObject");
+            IDynamicExpression e1 = context.CompileDynamic("a = null");
+
+            Assert.IsFalse((bool)e1.Evaluate());
+        }
     }
 }

@@ -27,8 +27,8 @@ LICENSE = "This library is free software; you can redistribute it and/or
 COPYRIGHT = "Copyright (c) 2007 Eugene Ciloci"
 
 %tokens%
-ADD			     = "+"
-SUB                          = "-"
+ADD				= "+"
+SUB             = "-"
 MUL                          = "*"
 DIV                          = "/"
 POWER                        = "^"
@@ -64,7 +64,7 @@ TRUE			     = "True"
 FALSE			     = "False"
 IDENTIFIER		     = <<[a-z_]\w*>>
 HEX_LITERAL		     = <<0x[0-9a-f]+(u|l|ul|lu)?>>
-NULL_LITERAL                 = "null"
+NULL_LITERAL        = "null"
 TIMESPAN			= <<##(\d+\.)?\d{2}:\d{2}(:\d{2}(\.\d{1,7})?)?#>>
 DATETIME			= <<#[^#]+#>>
 
