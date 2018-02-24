@@ -39,5 +39,15 @@ namespace ExpressionBuildingTest
 
             Assert.IsFalse((bool)e1.Evaluate());
         }
+
+        [TestMethod]
+        public void NullIsNullCheck()
+        {
+            ExpressionContext context = new ExpressionContext();
+            context.Variables.Add("a", "stringObject");
+            IDynamicExpression e1 = context.CompileDynamic("null = null");
+
+            Assert.IsTrue((bool)e1.Evaluate());
+        }
     }
 }
