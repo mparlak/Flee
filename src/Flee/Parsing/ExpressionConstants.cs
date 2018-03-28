@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-
-namespace Flee.Parsing
+﻿namespace Flee.Parsing
 {
     ///<remarks>
     /// An enumeration with token and production node
@@ -43,9 +38,9 @@ namespace Flee.Parsing
         CHAR_LITERAL = 1031,
         TRUE = 1032,
         FALSE = 1033,
-        IDENTIFIER = 1034,
+        NULL_LITERAL = 1034,
         HEX_LITERAL = 1035,
-        NULL_LITERAL = 1036,
+        IDENTIFIER = 1036,
         TIMESPAN = 1037,
         DATETIME = 1038,
         IF = 1039,

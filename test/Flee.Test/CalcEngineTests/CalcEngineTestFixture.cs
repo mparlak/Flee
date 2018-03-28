@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Flee.CalcEngine.PublicTypes;
+﻿using Flee.CalcEngine.PublicTypes;
 using Flee.PublicTypes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
+using System.Collections.Generic;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Flee.Test.CalcEngineTests
@@ -129,8 +128,8 @@ namespace Flee.Test.CalcEngineTests
 
             ce.Add("x", "100 >> 2", context);
             ce.Recalculate("x");
-            var result = ce.GetResult<bool>("x");
-            Assert.IsTrue(result);
+            var result = ce.GetResult<int>("x");
+            Assert.AreEqual(25, result);
         }
 
         [Test]
@@ -163,7 +162,7 @@ namespace Flee.Test.CalcEngineTests
             ce.Add("b", "a + y", context);
             ce.Add("c", "b * 2", context);
             ce.Recalculate("a");
-            variables.Add("y", 222);
+            variables["y"] = 222;
             ce.Recalculate("b");
             var result = ce.GetResult<int>("c");
             Assert.AreEqual(((100 * 2) + 222) * 2, result);
@@ -180,7 +179,7 @@ namespace Flee.Test.CalcEngineTests
             ce.Add("a", "x * 2", context);
             variables.Add("y", 1);
             ce.Add("b", "a + y + b", context);
-            ce.Recalculate("a");
+            Assert.ThrowsException<CircularReferenceException>(() => { ce.Recalculate("a"); });
         }
 
         [Test]
@@ -201,9 +200,6 @@ namespace Flee.Test.CalcEngineTests
             foreach (var expressionVariable in expressionVariables.Keys)
                 vars[expressionVariable] = expressionVariables[expressionVariable];
             var a = dynamicExpression.Evaluate();
-
-
-
 
             //ExpressionContext context = new ExpressionContext();
             //VariableCollection variables = context.Variables;
