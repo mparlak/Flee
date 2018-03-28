@@ -3,7 +3,7 @@
   <metadata>
     <id>Flee</id>
     <title>Flee</title>
-    <version>1.0.3</version>
+    <version>1.0.6</version>
     <authors>Muhammet Parlak</authors>
     <owners>Muhammet Parlak</owners>
     <licenseUrl>https://github.com/mparlak/Flee</licenseUrl>
@@ -14,13 +14,30 @@
     <copyright>Copyright 2017</copyright>
     <tags>flee,expression evaluator,Expression Evaluator for c#</tags>
     <releaseNotes>
+      1.0.6
+      • Fixed – Fix for null check is broken
+      • Fixed – signed version of Flee
+      1.0.5
+      • Fixed – Expressions as variables causes InvalidCastException
+      1.0.4
+      • Fixed – Update AndOr.cs pull request
+      • Fixed – Fix issue on TimeSpan pull request
+      • Fixed – Add proper gitignore and apply it retroactively pull request
       1.0.3
       • Fixed – The type 'Object' is defined in an assembly that is not referenced. You must add a reference to assembly netstandard 2.0
     </releaseNotes>
+    <dependencies>
+      <group targetFramework="netstandard2.0">
+        <dependency id="System.ComponentModel" version="4.3.0" />
+        <dependency id="System.Reflection" version="4.3.0" />
+        <dependency id="System.Reflection.Emit" version="4.3.0" />
+        <dependency id="System.Reflection.Emit.ILGeneration" version="4.3.0" />
+        <dependency id="System.Reflection.Emit.Lightweight" version="4.3.0" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
-    <file src="lib\net45\Flee.dll" target="lib\net45" />
-    <file src="lib\net461\Flee.dll" target="lib\net461" />
-    <file src="lib\netstandard20\Flee.NetStandard.dll" target="lib\netstandard20" />
+    <file src="src\Flee.Net45\bin\Release\Flee.Net45.dll" exclude="bin\Release\*.dll.config" target="lib\net45\Flee.Net45.dll" />
+    <file src="src\Flee.NetStandard20\bin\Release\netstandard2.0\Flee.NetStandard20.dll" exclude="bin\Release\*.dll.config" target="lib\netstandard20\Flee.NetStandard20.dll" />
   </files>
 </package>
