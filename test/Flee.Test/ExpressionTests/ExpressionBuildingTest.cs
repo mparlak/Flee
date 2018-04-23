@@ -30,6 +30,34 @@ namespace ExpressionBuildingTest
             Console.WriteLine(e.Evaluate());
         }
 
+
+        [TestMethod]
+        public void Test_IfExpression_enUS()
+        {
+            ExpressionContext context = new ExpressionContext();
+            context.Options.ParseCulture = new System.Globalization.CultureInfo("en-US");
+
+            int resultWhenTrue = 3;
+
+            IDynamicExpression e = context.CompileDynamic("if(1<2, 3, 4)");
+
+            Assert.IsTrue((int)e.Evaluate() == resultWhenTrue);
+        }
+
+        [TestMethod]
+        public void Test_IfExpression_fiFI()
+        {
+            ExpressionContext context = new ExpressionContext();
+            context.Imports.AddType(typeof(Math));
+            context.Options.ParseCulture = new System.Globalization.CultureInfo("fi-FI");
+
+            int resultWhenFalse = 4;
+
+            IDynamicExpression e = context.CompileDynamic("if(1>2; 3; 4)");
+
+            Assert.IsTrue((int)e.Evaluate() == resultWhenFalse);
+        }
+
         [TestMethod]
         public void NullCheck()
         {

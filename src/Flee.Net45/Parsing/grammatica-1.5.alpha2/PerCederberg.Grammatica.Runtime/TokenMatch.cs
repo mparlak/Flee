@@ -8,8 +8,7 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
 {
     /**
      * The token match status. This class contains logic to ensure that
-     * only the longest match is considered. It also prefers lower token
-     * pattern identifiers if two matches have the same length.
+     * only the longest match is considered.
      */
     internal class TokenMatch
     {
@@ -29,11 +28,6 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
         public void Update(int length, TokenPattern pattern)
         {
             if (this._length < length)
-            {
-                this._length = length;
-                this._pattern = pattern;
-            }
-            else if (this._length == length && this._pattern.Id > pattern.Id)
             {
                 this._length = length;
                 this._pattern = pattern;
