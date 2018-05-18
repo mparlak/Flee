@@ -30,6 +30,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>flee.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -145,6 +154,7 @@
     <Compile Include="Resources\ResourceKeys.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="flee.snk" />
     <None Include="Parsing\Expression.grammar" />
   </ItemGroup>
   <ItemGroup>

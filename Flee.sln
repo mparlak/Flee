@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flee.Console", "test\Flee.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flee.Net45", "src\Flee.Net45\Flee.Net45.csproj", "{658C0ED4-404A-48EC-96FF-D22C3C12AC39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flee.NetStandard20", "src\Flee.NetStandard20\Flee.NetStandard20.csproj", "{8C600BAB-128A-4792-8260-469B2DAD6681}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flee.NetStandard20", "src\Flee.NetStandard20\Flee.NetStandard20.csproj", "{8C600BAB-128A-4792-8260-469B2DAD6681}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
