@@ -34,7 +34,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>flee.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>flee.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DelaySign>false</DelaySign>
@@ -154,7 +154,7 @@
     <Compile Include="Resources\ResourceKeys.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="flee.snk" />
+    <None Include="flee.pfx" />
     <None Include="Parsing\Expression.grammar" />
   </ItemGroup>
   <ItemGroup>
