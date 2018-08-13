@@ -100,14 +100,21 @@ namespace Flee.InternalTypes
         /// <remarks></remarks>
         public bool IsLongBranch(FleeILGenerator ilg, Label target)
         {
+			//return true;
             ILLocation startLoc = new ILLocation(ilg.Length);
             BranchInfo bi = new BranchInfo(startLoc, target);
 
             int index = MyBranchInfos.IndexOf(bi);
-            bi = MyBranchInfos[index];
-
-            return bi.IsLongBranch;
-        }
+			if (index > -1 && index < MyBranchInfos.Count)
+			{
+				bi = MyBranchInfos[index];
+				return bi.IsLongBranch;
+			}
+			else
+			{
+				return true; // temp fix: not sure why, but MyBranchInfos seems to be missing elements when executing long scripts
+			}
+		}
 
         /// <summary>
         /// Add a branch from a location to a target label
