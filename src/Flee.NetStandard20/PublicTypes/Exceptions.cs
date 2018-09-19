@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Flee.InternalTypes;
 using Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime;
 using Flee.Resources;
@@ -67,5 +64,18 @@ namespace Flee.PublicTypes
         }
 
         public CompileExceptionReason Reason => _myReason;
+    }
+
+    /// <summary>
+    /// Exception, which occured during expression evaluation.
+    /// </summary>
+    [Serializable]
+    public sealed class ExpressionEvaluationException : Exception
+    {
+        private const string DefaultMessage = "Expression valuation failed. Check inner exception for details.";
+        
+        public ExpressionEvaluationException(Exception innerException) : base(DefaultMessage, innerException)
+        {
+        }
     }
 }

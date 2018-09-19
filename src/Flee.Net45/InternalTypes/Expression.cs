@@ -157,15 +157,28 @@ namespace Flee.InternalTypes
             }
         }
 
+        private T HandleEvaluationException<T>(Func<T> function)
+        {
+            try
+            {
+                return function.Invoke();
+            }
+            catch (Exception e)
+            {
+                throw new ExpressionEvaluationException(e);
+            }
+        }
+
         public object Evaluate()
         {
-            return _myEvaluator(_myOwner, _myContext, _myContext.Variables);
+            return HandleEvaluationException(() => _myEvaluator(_myOwner, _myContext, _myContext.Variables));
         }
 
         public T EvaluateGeneric()
         {
-            return _myEvaluator(_myOwner, _myContext, _myContext.Variables);
+            return HandleEvaluationException(() => _myEvaluator(_myOwner, _myContext, _myContext.Variables));
         }
+
         T IGenericExpression<T>.Evaluate()
         {
             return EvaluateGeneric();

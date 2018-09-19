@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Flee.CalcEngine.PublicTypes;
@@ -30,7 +32,8 @@ namespace Flee.Test.CalcEngineTests
         [Test]
         public void LongScriptWithManyFunctions()
         {
-			var script = System.IO.File.ReadAllText(@"test\Flee.Test\TestScripts\LongScriptWithManyFunctions.js");
+            var workingDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var script = File.ReadAllText($"{workingDir}\\TestScripts\\LongScriptWithManyFunctions.js");
 			var expr = _myEngine.Context.CompileDynamic(script);
 			var result = expr.Evaluate();
 
@@ -41,7 +44,8 @@ namespace Flee.Test.CalcEngineTests
 		[Test]
 		public void FailingLongScriptWithManyFunctions()
 		{
-			var script = System.IO.File.ReadAllText(@"test\Flee.Test\TestScripts\FailingLongScriptWithManyFunctions.js");
+		    var workingDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var script = File.ReadAllText($"{workingDir}\\TestScripts\\FailingLongScriptWithManyFunctions.js");
 			var expr = _myEngine.Context.CompileDynamic(script);
 			var result = expr.Evaluate();
 

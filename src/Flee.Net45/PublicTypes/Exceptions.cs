@@ -68,4 +68,17 @@ namespace Flee.PublicTypes
 
         public CompileExceptionReason Reason => _myReason;
     }
+
+    /// <summary>
+    /// Exception, which occured during expression evaluation.
+    /// </summary>
+    [Serializable]
+    public sealed class ExpressionEvaluationException : Exception
+    {
+        private const string DefaultMessage = "Expression valuation failed. Check inner exception for details.";
+
+        public ExpressionEvaluationException(Exception innerException) : base(DefaultMessage, innerException)
+        {
+        }
+    }
 }
