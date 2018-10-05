@@ -193,7 +193,7 @@ namespace Flee.PublicTypes
             return this.CloneInternal(true);
         }
 
-        public IDynamicExpression CompileDynamic(string expression)
+        public virtual IDynamicExpression CompileDynamic(string expression)
         {
             return new Flee.InternalTypes.Expression<object>(expression, this, false);
         }
