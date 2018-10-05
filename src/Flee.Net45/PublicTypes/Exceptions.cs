@@ -28,7 +28,7 @@ namespace Flee.PublicTypes
     public sealed class ExpressionCompileException : Exception
     {
         private readonly CompileExceptionReason _myReason;
-        internal ExpressionCompileException(string message, CompileExceptionReason reason) : base(message)
+        public ExpressionCompileException(string message, CompileExceptionReason reason) : base(message)
         {
             _myReason = reason;
         }
