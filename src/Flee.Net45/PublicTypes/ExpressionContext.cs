@@ -15,7 +15,7 @@ using Flee.Resources;
 
 namespace Flee.PublicTypes
 {
-    public sealed class ExpressionContext
+    public class ExpressionContext
     {
 
         #region "Fields"
