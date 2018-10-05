@@ -248,7 +248,7 @@ namespace Flee.PublicTypes
 
         public ExpressionImports Imports => _myProperties.GetValue<ExpressionImports>("Imports");
 
-        public VariableCollection Variables => _myVariables;
+        public virtual VariableCollection Variables => _myVariables;
 
         public CalculationEngine CalculationEngine => _myProperties.GetValue<CalculationEngine>("CalculationEngine");
 
