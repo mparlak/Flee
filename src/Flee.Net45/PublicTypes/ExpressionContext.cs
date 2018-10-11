@@ -15,7 +15,7 @@ using Flee.Resources;
 
 namespace Flee.PublicTypes
 {
-    public class ExpressionContext
+    public sealed class ExpressionContext
     {
 
         #region "Fields"
@@ -193,7 +193,7 @@ namespace Flee.PublicTypes
             return this.CloneInternal(true);
         }
 
-        public virtual IDynamicExpression CompileDynamic(string expression)
+        public IDynamicExpression CompileDynamic(string expression)
         {
             return new Flee.InternalTypes.Expression<object>(expression, this, false);
         }
@@ -248,7 +248,7 @@ namespace Flee.PublicTypes
 
         public ExpressionImports Imports => _myProperties.GetValue<ExpressionImports>("Imports");
 
-        public virtual VariableCollection Variables => _myVariables;
+        public VariableCollection Variables => _myVariables;
 
         public CalculationEngine CalculationEngine => _myProperties.GetValue<CalculationEngine>("CalculationEngine");
 

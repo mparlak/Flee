@@ -23,7 +23,7 @@ namespace Flee.PublicTypes
 
         public event EventHandler<InvokeFunctionEventArgs> InvokeFunction;
 
-        public VariableCollection(ExpressionContext context)
+        internal VariableCollection(ExpressionContext context)
         {
             _myContext = context;
             this.CreateDictionary();
