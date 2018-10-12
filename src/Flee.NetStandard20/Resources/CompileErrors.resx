@@ -220,10 +220,10 @@
     <value>Type '{0}' is not an array and does not have an indexer which accepts '{1}'</value>
   </data>
   <data name="UndefinedFunction" xml:space="preserve">
-    <value>Could find not function '{0}({1})'</value>
+    <value>Could not find function '{0}({1})'</value>
   </data>
   <data name="UndefinedFunctionOnType" xml:space="preserve">
-    <value>Could find not function '{0}({1})' on type '{2}'</value>
+    <value>Could not find function '{0}({1})' on type '{2}'</value>
   </data>
   <data name="UNEXPECTED_CHAR" xml:space="preserve">
     <value>Unexpected character: {0}</value>
