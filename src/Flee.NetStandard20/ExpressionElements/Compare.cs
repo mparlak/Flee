@@ -24,7 +24,7 @@ namespace Flee.ExpressionElements
         public void Initialize(ExpressionElement leftChild, ExpressionElement rightChild, LogicalCompareOperation op)
         {
             MyLeftChild = leftChild;
-            MyRightChild = (Int32LiteralElement)rightChild;
+            MyRightChild = rightChild;
             _myOperation = op;
         }
 
