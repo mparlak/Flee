@@ -23,7 +23,7 @@ namespace Flee.ExpressionElements
             _myWhenTrue = whenTrue;
             _myWhenFalse = whenFalse;
 
-            if ((!object.ReferenceEquals(_myCondition.ResultType, typeof(bool))))
+            if (!ImplicitConverter.EmitImplicitConvert(_myCondition.ResultType, typeof(bool), null))
             {
                 base.ThrowCompileException(CompileErrorResourceKeys.FirstArgNotBoolean, CompileExceptionReason.TypeMismatch);
             }
