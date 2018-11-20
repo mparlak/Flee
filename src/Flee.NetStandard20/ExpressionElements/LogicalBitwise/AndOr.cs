@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Reflection.Emit;
 using Flee.ExpressionElements.Base;
 using Flee.InternalTypes;
@@ -26,6 +27,15 @@ namespace Flee.ExpressionElements.LogicalBitwise
 
         protected override System.Type GetResultType(System.Type leftType, System.Type rightType)
         {
+            MethodInfo overloadedMethod = this.GetOverloadedAndOrOperator();
+
+            // Is an overloaded operator defined for our left and right children?
+            if ((overloadedMethod != null))
+            {
+                // Yes, so use its return type
+                return overloadedMethod.ReturnType;
+            }
+
             Type bitwiseOpType = Utility.GetBitwiseOpType(leftType, rightType);
             if ((bitwiseOpType != null))
             {
@@ -41,21 +51,52 @@ namespace Flee.ExpressionElements.LogicalBitwise
             }
         }
 
+        private MethodInfo GetOverloadedAndOrOperator()
+        {
+            // Get the name of the operator
+            string name = GetOverloadedOperatorFunctionName(_myOperation);
+            return base.GetOverloadedBinaryOperator(name, _myOperation);
+        }
+
+        private static string GetOverloadedOperatorFunctionName(AndOrOperation op)
+        {
+            switch (op)
+            {
+                case AndOrOperation.And:
+                    return "BitwiseAnd";
+                case AndOrOperation.Or:
+                    return "BitwiseOr";
+                default:
+                    Debug.Assert(false, "unknown operator type");
+                    return null;
+            }
+        }
+
         public override void Emit(FleeILGenerator ilg, IServiceProvider services)
         {
-            Type resultType = this.ResultType;
+            MethodInfo overloadedMethod = this.GetOverloadedAndOrOperator();
 
-            if (object.ReferenceEquals(resultType, typeof(bool)))
+            if ((overloadedMethod != null))
             {
-                this.DoEmitLogical(ilg, services);
+                // Emit a call to an overloaded operator
+                this.EmitOverloadedOperatorCall(overloadedMethod, ilg, services);
             }
             else
             {
-                MyLeftChild.Emit(ilg, services);
-                ImplicitConverter.EmitImplicitConvert(MyLeftChild.ResultType, resultType, ilg);
-                MyRightChild.Emit(ilg, services);
-                ImplicitConverter.EmitImplicitConvert(MyRightChild.ResultType, resultType, ilg);
-                EmitBitwiseOperation(ilg, _myOperation);
+                Type resultType = this.ResultType;
+
+                if (object.ReferenceEquals(resultType, typeof(bool)))
+                {
+                    this.DoEmitLogical(ilg, services);
+                }
+                else
+                {
+                    MyLeftChild.Emit(ilg, services);
+                    ImplicitConverter.EmitImplicitConvert(MyLeftChild.ResultType, resultType, ilg);
+                    MyRightChild.Emit(ilg, services);
+                    ImplicitConverter.EmitImplicitConvert(MyRightChild.ResultType, resultType, ilg);
+                    EmitBitwiseOperation(ilg, _myOperation);
+                }
             }
         }
 
