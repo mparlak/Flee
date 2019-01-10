@@ -90,6 +90,11 @@ namespace Flee.ExpressionElements.Base
             {
                 return leftMethod;
             }
+            else if (object.ReferenceEquals(leftMethod, rightMethod))
+            {
+                // same operator for both (most likely defined in a common base class)
+                return leftMethod;
+            }
             else
             {
                 // Ambiguous call

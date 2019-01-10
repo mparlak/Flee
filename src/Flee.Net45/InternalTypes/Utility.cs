@@ -291,16 +291,17 @@ namespace Flee.InternalTypes
         public static MethodInfo GetOverloadedOperator(string name, Type sourceType, Binder binder, params Type[] argumentTypes)
         {
             name = string.Concat("op_", name);
-            MethodInfo mi = sourceType.GetMethod(name, BindingFlags.Public | BindingFlags.Static, binder, CallingConventions.Any, argumentTypes, null);
+            MethodInfo mi = null;
+            do
+            {
+                mi = sourceType.GetMethod(name, BindingFlags.Public | BindingFlags.Static, binder, CallingConventions.Any, argumentTypes, null);
+                if (mi != null && mi.IsSpecialName == true)
+                {
+                    return mi;
+                }
+            } while ((sourceType = sourceType.BaseType) != null);
 
-            if (mi == null || mi.IsSpecialName == false)
-            {
-                return null;
-            }
-            else
-            {
-                return mi;
-            }
+            return null;
         }
 
         public static int GetILGeneratorLength(ILGenerator ilg)

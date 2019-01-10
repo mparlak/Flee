@@ -58,6 +58,7 @@
     <Compile Include="CalcEngineTests\CalcEngineTestFixture.cs" />
     <Compile Include="CalcEngineTests\LongScriptTests.cs" />
     <Compile Include="CalcEngineTests\SimpleCalcEngineTests.cs" />
+    <Compile Include="ExpressionTests\CustomOperators.cs" />
     <Compile Include="ExpressionTests\ExpressionBuildingTest.cs" />
     <Compile Include="ExpressionTests\Benchmarks.cs" />
     <Compile Include="ExpressionTests\Core.cs" />
