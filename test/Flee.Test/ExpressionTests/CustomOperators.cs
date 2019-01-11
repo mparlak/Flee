@@ -15,6 +15,10 @@ namespace Flee.Test.ExpressionTests
         {
             return new Base { Value = left.Value + right.Value };
         }
+        public static Base operator -(Base left)
+        {
+            return new Base { Value = -left.Value };
+        }
     }
 
     public class Derived : Base
@@ -115,6 +119,45 @@ namespace Flee.Test.ExpressionTests
 
             var message = "ArithmeticElement: Operation 'Subtract' is not defined for types 'Derived' and 'OtherDerived'";
             Assert.Throws<ExpressionCompileException>(() => context.CompileDynamic("m1 - m2"), message);
+        }
+
+        [Test]
+        public void BaseUnaryOperator()
+        {
+            var m1 = new Base { Value = 2 };
+
+            ExpressionContext context = new ExpressionContext();
+            context.Variables.Add("m1", m1);
+            IDynamicExpression e1 = context.CompileDynamic("-m1");
+
+            Base negated = (Base)e1.Evaluate();
+            Assert.AreEqual(-2, negated.Value);
+        }
+
+        [Test]
+        public void DerivedUnaryOperator()
+        {
+            var m1 = new Derived { Value = 2 };
+
+            ExpressionContext context = new ExpressionContext();
+            context.Variables.Add("m1", m1);
+            IDynamicExpression e1 = context.CompileDynamic("-m1");
+
+            Base negated = (Base)e1.Evaluate();
+            Assert.AreEqual(-2, negated.Value);
+        }
+
+        [Test]
+        public void DerivedUnaryOperatorPlusOperator()
+        {
+            var m1 = new Derived { Value = 2 };
+
+            ExpressionContext context = new ExpressionContext();
+            context.Variables.Add("m1", m1);
+            IDynamicExpression e1 = context.CompileDynamic("-m1 + m1");
+
+            Base negated = (Base)e1.Evaluate();
+            Assert.AreEqual(0, negated.Value);
         }
     }
 }
