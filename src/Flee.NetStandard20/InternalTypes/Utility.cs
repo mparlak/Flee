@@ -287,7 +287,7 @@ namespace Flee.InternalTypes
 
             if (destType != null)
             {
-                bool returnTypeMatch = ImplicitConverter.EmitImplicitConvert(method.ReturnType, destType, null);
+                bool returnTypeMatch = destType.IsAssignableFrom(method.ReturnType);
 
                 if (returnTypeMatch == false)
                 {
@@ -296,7 +296,7 @@ namespace Flee.InternalTypes
             }
 
             ParameterInfo[] parameters = method.GetParameters();
-            bool argumentMatch = parameters.Length > 0 && ImplicitConverter.EmitImplicitConvert((Type)data["sourceType"], parameters[0].ParameterType, null);
+            bool argumentMatch = parameters.Length > 0 && parameters[0].ParameterType.IsAssignableFrom((Type)data["sourceType"]);
 
             return argumentMatch;
         }
