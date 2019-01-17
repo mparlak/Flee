@@ -287,7 +287,7 @@ namespace Flee.InternalTypes
 
             if (destType != null)
             {
-                bool returnTypeMatch = destType.IsAssignableFrom(method.ReturnType);
+                bool returnTypeMatch = object.ReferenceEquals(destType, method.ReturnType);
 
                 if (returnTypeMatch == false)
                 {
