@@ -78,9 +78,8 @@ namespace Flee.PublicTypes
     [Serializable]
     public sealed class ExpressionEvaluationException : Exception
     {
-        private const string DefaultMessage = "Expression valuation failed. Check inner exception for details.";
 
-        public ExpressionEvaluationException(Exception innerException) : base(DefaultMessage, innerException)
+        public ExpressionEvaluationException(string message) : base(message)
         {
         }
     }

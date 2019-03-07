@@ -166,15 +166,15 @@ namespace Flee.InternalTypes
                 var variables = _myInfo.GetReferencedVariables();
                 if (variables.Length != 0)
                 {
-                    var exception = GetCustomExceptionMessage<T>(variables);
+                    var exception = GetCustomExceptionMessage(variables);
                     throw new ExpressionEvaluationException(exception);
                 }
-                throw new ExpressionEvaluationException(e);
+                throw new ExpressionEvaluationException(e.Message);
 
             }
         }
 
-        private Exception GetCustomExceptionMessage<T>(string[] variables)
+        private string GetCustomExceptionMessage(string[] variables)
         {
             var errorMessage = "";
             foreach (var variable in variables)
@@ -185,9 +185,9 @@ namespace Flee.InternalTypes
                     : $"{variable} = {inputValue} " + " ";
             }
 
-            var exception = new Exception(variables.Length == 1
+            var exception = variables.Length == 1
                 ? $"failed to run expression {_myExpression} with input {errorMessage}"
-                : $"failed to run expression {_myExpression} with inputs: {errorMessage}");
+                : $"failed to run expression {_myExpression} with inputs: {errorMessage}";
             return exception;
         }
 
