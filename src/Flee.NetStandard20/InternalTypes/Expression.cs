@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
 using Flee.ExpressionElements;
@@ -162,8 +163,32 @@ namespace Flee.InternalTypes
             }
             catch (Exception e)
             {
-                throw new ExpressionEvaluationException(e);
+                var variables = _myInfo.GetReferencedVariables();
+                if (variables.Length != 0)
+                {
+                    var exception = GetCustomExceptionMessage(variables);
+                    throw new ExpressionEvaluationException(exception);
+                }
+                throw new ExpressionEvaluationException(e.Message);
+
             }
+        }
+
+        private string GetCustomExceptionMessage(string[] variables)
+        {
+            var errorMessage = "";
+            foreach (var variable in variables)
+            {
+                var inputValue = Context.Variables.GetVariableValueInternal<string>(variable);
+                errorMessage += string.IsNullOrWhiteSpace(inputValue)
+                    ? $"{variable} = empty "
+                    : $"{variable} = {inputValue} " + " ";
+            }
+
+            var exception = variables.Length == 1
+                ? $"failed to run expression {_myExpression} with input {errorMessage}"
+                : $"failed to run expression {_myExpression} with inputs: {errorMessage}";
+            return exception;
         }
 
         public object Evaluate()
