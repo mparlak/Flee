@@ -119,7 +119,7 @@ namespace Flee.ExpressionElements.MemberElements
 
             foreach (CustomMethodInfo cmi in arr)
             {
-                if (cmi.IsMatch(argTypes) == true)
+                if (cmi.IsMatch(argTypes, MyPrevious, MyContext) == true)
                 {
                     customInfos.Add(cmi);
                 }
@@ -333,7 +333,10 @@ namespace Flee.ExpressionElements.MemberElements
             // Emit either a regular or paramArray call
             if (_myTargetMethodInfo.IsParamArray == false)
             {
-                this.EmitRegularFunctionInternal(parameters, elements, ilg, services);
+                if (_myTargetMethodInfo.IsExtensionMethod == false)
+                    this.EmitRegularFunctionInternal(parameters, elements, ilg, services);
+                else
+                    this.EmitExtensionFunctionInternal(parameters, elements, ilg, services);
             }
             else
             {
@@ -341,6 +344,21 @@ namespace Flee.ExpressionElements.MemberElements
             }
 
             MemberElement.EmitMethodCall(this.ResultType, nextRequiresAddress, this.Method, ilg);
+        }
+
+        private void EmitExtensionFunctionInternal(ParameterInfo[] parameters, ExpressionElement[] elements, FleeILGenerator ilg, IServiceProvider services)
+        {
+            Debug.Assert(parameters.Length == elements.Length + 1, "argument count mismatch");
+            if (MyPrevious == null) this.EmitLoadOwner(ilg);
+            //Emit each element and any required conversions to the actual parameter type
+            for(int i = 1; i <= parameters.Length - 1; i++)
+            {
+                ExpressionElement element = elements[i-1];
+                ParameterInfo pi = parameters[i];
+                element.Emit(ilg, services);
+                bool success = ImplicitConverter.EmitImplicitConvert(element.ResultType, pi.ParameterType, ilg);
+                Debug.Assert(success, "conversion failed");
+            }
         }
 
         /// <summary>
@@ -390,5 +408,6 @@ namespace Flee.ExpressionElements.MemberElements
         protected override bool IsPublic => this.Method.IsPublic;
 
         public override bool IsStatic => this.Method.IsStatic;
+        public override bool IsExtensionMethod => this._myTargetMethodInfo.IsExtensionMethod;
     }
 }

@@ -175,7 +175,7 @@ namespace Flee.InternalTypes
         public bool IsParamArray;
         public Type[] MyFixedArgTypes;
         public Type[] MyParamArrayArgTypes;
-
+        public bool IsExtensionMethod;
         public Type ParamArrayElementType;
         public CustomMethodInfo(MethodInfo target)
         {
@@ -190,14 +190,41 @@ namespace Flee.InternalTypes
             {
                 _myScore = 0.0F;
             }
+            else if (@params.Length == 1 && argTypes.Length == 0)//extension method without parameter support -> prefer members
+            {
+               _myScore = 0.1F;
+            }
             else if (IsParamArray == true)
             {
                 _myScore = this.ComputeScoreForParamArray(@params, argTypes);
+            }
+            else if(IsExtensionMethod == true)
+            {
+                _myScore = this.ComputeScoreExtensionMethodInternal(@params, argTypes);
             }
             else
             {
                 _myScore = this.ComputeScoreInternal(@params, argTypes);
             }
+        }
+
+        /// <summary>
+        /// Compute a score showing how close our method matches the given argument types (for extension methods)
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <param name="argTypes"></param>
+        /// <returns></returns>
+        private float ComputeScoreExtensionMethodInternal(ParameterInfo[] parameters, Type[] argTypes)
+        {
+            Debug.Assert(parameters.Length == argTypes.Length + 1);
+            int sum = 0;
+
+            for (int i = 0; i <= argTypes.Length - 1; i++)
+            {
+                sum += ImplicitConverter.GetImplicitConvertScore(argTypes[i], parameters[i+1].ParameterType);
+            }
+
+            return sum;
         }
 
         /// <summary>
@@ -272,7 +299,7 @@ namespace Flee.InternalTypes
         /// </summary>
         /// <param name="argTypes"></param>
         /// <returns></returns>
-        public bool IsMatch(Type[] argTypes)
+        public bool IsMatch(Type[] argTypes, MemberElement previous, ExpressionContext context)
         {
             ParameterInfo[] parameters = _myTarget.GetParameters();
 
@@ -293,6 +320,12 @@ namespace Flee.InternalTypes
 
             if (lastParam.IsDefined(typeof(ParamArrayAttribute), false) == false)
             {
+                //Extension method support
+                if(parameters.Length == argTypes.Length + 1)
+                {
+                    IsExtensionMethod = true;
+                    return AreValidExtensionMethodArgumentsForParameters(argTypes, parameters, previous, context);
+                }
                 if ((parameters.Length != argTypes.Length))
                 {
                     // Not a paramArray and parameter and argument counts don't match
@@ -360,6 +393,36 @@ namespace Flee.InternalTypes
             MyParamArrayArgTypes = paramArrayArgTypes;
 
             // They all match, so we are a match
+            return true;
+        }
+
+        private static bool AreValidExtensionMethodArgumentsForParameters(Type[] argTypes, ParameterInfo[] parameters, MemberElement previous, ExpressionContext context)
+        {
+            Debug.Assert(argTypes.Length + 1 == parameters.Length);
+
+            if (previous != null)
+            {
+                if (ImplicitConverter.EmitImplicitConvert(previous.ResultType, parameters[0].ParameterType, null) == false)
+                {
+                    return false;
+                }
+            }
+            else if (context.ExpressionOwner != null)
+            {
+                if (ImplicitConverter.EmitImplicitConvert(context.ExpressionOwner.GetType(), parameters[0].ParameterType, null) == false)
+                    return false;
+            }
+            else
+                return false;
+
+            //Match if every given argument is implicitly convertible to the method's corresponding parameter
+            for (int i = 0; i <= argTypes.Length - 1; i++)
+            {
+                if (ImplicitConverter.EmitImplicitConvert(argTypes[i], parameters[i+1].ParameterType, null) == false)
+                {
+                    return false;
+                }
+            }
             return true;
         }
 

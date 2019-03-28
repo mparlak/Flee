@@ -181,5 +181,6 @@ namespace Flee.ExpressionElements.MemberElements
         }
 
         public override bool IsStatic => false;
+        public override bool IsExtensionMethod => false;
     }
 }

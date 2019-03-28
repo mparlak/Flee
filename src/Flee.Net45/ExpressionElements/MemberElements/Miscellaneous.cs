@@ -38,6 +38,7 @@ namespace Flee.ExpressionElements.MemberElements
         protected override bool IsPublic => true;
 
         public override bool IsStatic => false;
+        public override bool IsExtensionMethod => false;
 
         public override System.Type ResultType => _myElement.ResultType;
     }

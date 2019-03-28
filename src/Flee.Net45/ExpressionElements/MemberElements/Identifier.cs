@@ -490,5 +490,6 @@ namespace Flee.ExpressionElements.MemberElements
                 }
             }
         }
+        public override bool IsExtensionMethod => false;
     }
 }

@@ -50,6 +50,7 @@ namespace Flee.ExpressionElements.Base
 
         protected abstract void ResolveInternal();
         public abstract bool IsStatic { get; }
+        public abstract bool IsExtensionMethod { get; }
         protected abstract bool IsPublic { get; }
 
         protected virtual void Validate()
@@ -59,7 +60,7 @@ namespace Flee.ExpressionElements.Base
                 return;
             }
 
-            if (this.IsStatic == true && this.SupportsStatic == false)
+            if (this.IsStatic == true && this.SupportsStatic == false && IsExtensionMethod == false)
             {
                 base.ThrowCompileException(CompileErrorResourceKeys.StaticMemberCannotBeAccessedWithInstanceReference, CompileExceptionReason.TypeMismatch, MyName);
             }
@@ -298,7 +299,16 @@ namespace Flee.ExpressionElements.Base
             else
             {
                 // We are not the first element; find all members with our name on the type of the previous member
-                return MyPrevious.TargetType.FindMembers(targets, BindFlags, MyOptions.MemberFilter, MyName);
+                // We are not the first element; find all members with our name on the type of the previous member
+                var foundMembers = MyPrevious.TargetType.FindMembers(targets, BindFlags, MyOptions.MemberFilter, MyName);
+                var importedMembers = MyContext.Imports.RootImport.FindMembers(MyName, targets);
+                if (foundMembers.Length == 0) //If no members found search in root import
+                    return importedMembers;
+
+                MemberInfo[] allMembers = new MemberInfo[foundMembers.Length + importedMembers.Length];
+                foundMembers.CopyTo(allMembers, 0);
+                importedMembers.CopyTo(allMembers, foundMembers.Length);
+                return allMembers;
             }
         }
 
@@ -316,14 +326,18 @@ namespace Flee.ExpressionElements.Base
             // Keep only the accessible members
             members = this.GetAccessibleMembers(members);
 
-            // If we have some matches, return them
-            if (members.Length > 0)
-            {
-                return members;
-            }
+            //Also search imports
+            var importedMembers = MyContext.Imports.RootImport.FindMembers(name, memberType);
 
-            // No matches on owner, so search imports
-            return MyContext.Imports.RootImport.FindMembers(name, memberType);
+            //if no members, just return imports
+            if (members.Length == 0)
+                return importedMembers;
+
+            //combine members and imports
+            MemberInfo[] allMembers = new MemberInfo[members.Length + importedMembers.Length];
+            members.CopyTo(allMembers, 0);
+            importedMembers.CopyTo(allMembers, members.Length);
+            return allMembers;
         }
 
         protected static bool IsElementPublic(MemberElement e)
