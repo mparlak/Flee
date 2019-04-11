@@ -39,9 +39,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Flee.Net45, Version=1.0.0.0, Culture=neutral, PublicKeyToken=951a102ce2413032, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Flee.1.2.1\lib\net45\Flee.Net45.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -61,6 +58,9 @@
     <Compile Include="ExpressionTests\ExpressionBuildingTest.cs" />
     <Compile Include="ExpressionTests\Benchmarks.cs" />
     <Compile Include="ExpressionTests\Core.cs" />
+    <Compile Include="ExpressionTests\ExtensionMethodTest.cs" />
+    <Compile Include="ExpressionTests\ExtensionMethodTestData\TestData.cs" />
+    <Compile Include="ExpressionTests\ExtensionMethodTestData\TestDataExtensions.cs" />
     <Compile Include="Infrastructure\Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -78,6 +78,12 @@
     <Content Include="TestScripts\SimpleCalcEngineTests.txt" />
     <Content Include="TestScripts\ValidCasts.txt" />
     <Content Include="TestScripts\ValidExpressions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Flee.Net45\Flee.Net45.csproj">
+      <Project>{658c0ed4-404a-48ec-96ff-d22c3c12ac39}</Project>
+      <Name>Flee.Net45</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

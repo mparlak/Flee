@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using Flee.InternalTypes;
@@ -50,6 +51,7 @@ namespace Flee.ExpressionElements.Base
 
         protected abstract void ResolveInternal();
         public abstract bool IsStatic { get; }
+        public virtual bool IsExtensionMethod => false;
         protected abstract bool IsPublic { get; }
 
         protected virtual void Validate()
@@ -59,7 +61,7 @@ namespace Flee.ExpressionElements.Base
                 return;
             }
 
-            if (this.IsStatic == true && this.SupportsStatic == false)
+            if (this.IsStatic == true && this.SupportsStatic == false && this.IsExtensionMethod == false)
             {
                 base.ThrowCompileException(CompileErrorResourceKeys.StaticMemberCannotBeAccessedWithInstanceReference, CompileExceptionReason.TypeMismatch, MyName);
             }
@@ -298,7 +300,16 @@ namespace Flee.ExpressionElements.Base
             else
             {
                 // We are not the first element; find all members with our name on the type of the previous member
-                return MyPrevious.TargetType.FindMembers(targets, BindFlags, MyOptions.MemberFilter, MyName);
+                var foundMembers =  MyPrevious.TargetType.FindMembers(targets, BindFlags, MyOptions.MemberFilter, MyName);
+                var importedMembers = MyContext.Imports.RootImport.FindMembers(MyName, targets); 
+
+                if (foundMembers.Length == 0)
+                {
+                    // if no members are available check static extension methods in the context 
+                    return importedMembers;
+                }
+
+                return foundMembers.Union(importedMembers).ToArray();
             }
         }
 
@@ -315,15 +326,18 @@ namespace Flee.ExpressionElements.Base
 
             // Keep only the accessible members
             members = this.GetAccessibleMembers(members);
-
-            // If we have some matches, return them
-            if (members.Length > 0)
+            
+            // Also search imports
+            var importedMembers = MyContext.Imports.RootImport.FindMembers(name, memberType);
+            
+            // if no members, just return imports
+            if (members.Length == 0)
             {
-                return members;
+                return importedMembers;
             }
 
-            // No matches on owner, so search imports
-            return MyContext.Imports.RootImport.FindMembers(name, memberType);
+            // Combine members and imports
+            return members.Union(importedMembers).ToArray();
         }
 
         protected static bool IsElementPublic(MemberElement e)
