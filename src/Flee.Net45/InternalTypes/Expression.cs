@@ -165,6 +165,10 @@ namespace Flee.InternalTypes
             }
             catch (Exception e)
             {
+                if (e.InnerException?.Message != null)
+                {
+                    throw new ExpressionEvaluationException(e.InnerException.Message);
+                }
                 var variables = _myInfo.GetReferencedVariables();
                 if (variables.Length != 0)
                 {
