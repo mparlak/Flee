@@ -34,6 +34,12 @@ You should install [Flee with NuGet](https://www.nuget.org/packages/Flee):
 Or via the .NET Core command line interface:
 
     dotnet add package Flee
+    
+## NuGet Packages
+
+| Name  | NuGet |
+| :---  | :---  |
+| [Flee](https://www.nuget.org/packages/Flee)                       | [![Flee](https://img.shields.io/badge/nuget-v1.2.2-blue.svg)](https://www.nuget.org/packages/Flee)                 
 
 ## More information
 * [Examples](https://github.com/mparlak/Flee/wiki/Examples) to learn how to create and evaluate expressions.

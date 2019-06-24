@@ -108,13 +108,10 @@ namespace Flee.InternalTypes
 			if (index > -1 && index < MyBranchInfos.Count)
 			{
 				bi = MyBranchInfos[index];
-				return bi.IsLongBranch;
 			}
-			else
-			{
-				return true; // temp fix: not sure why, but MyBranchInfos seems to be missing elements when executing long scripts
-			}
-		}
+
+            return bi.IsLongBranch;
+        }
 
         /// <summary>
         /// Add a branch from a location to a target label

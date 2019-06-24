@@ -104,7 +104,10 @@ namespace Flee.InternalTypes
             BranchInfo bi = new BranchInfo(startLoc, target);
 
             int index = MyBranchInfos.IndexOf(bi);
-            bi = MyBranchInfos[index];
+            if (index > -1 && index < MyBranchInfos.Count)
+            {
+                bi = MyBranchInfos[index];
+            }
 
             return bi.IsLongBranch;
         }

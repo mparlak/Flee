@@ -3,7 +3,7 @@
   <metadata>
     <id>Flee</id>
     <title>Flee</title>
-    <version>1.0.18</version>
+    <version>1.2.1</version>
     <authors>Muhammet Parlak</authors>
     <owners>Muhammet Parlak</owners>
     <licenseUrl>https://github.com/mparlak/Flee</licenseUrl>
@@ -14,10 +14,13 @@
     <copyright>Copyright 2017</copyright>
     <tags>flee,expression evaluator,Expression Evaluator for c#</tags>
     <releaseNotes>
-	  1.0.14
-	  * Added arguments field to compile exception.
-	  1.0.8
-	  * Forked. Additional exception handling.
+      1.2.1
+      • Fix for IndexOutOfRange when running complex(?) formulas
+      • Update Arithmetic.cs
+      1.2.0
+      • new – digitally sign a strong named assembly
+      1.1.0
+      • new – added strong name key
       1.0.7
       • Fixed – Flee fails to parse "if" formula
       1.0.6
@@ -43,7 +46,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\src\Flee.Net45\bin\Release\Flee.Net45.dll" exclude="..\bin\Release\*.dll.config" target="..\lib\net45\Flee.Net45.dll" />
-    <file src="..\src\Flee.NetStandard20\bin\Release\netstandard2.0\Flee.NetStandard20.dll" exclude="..\bin\Release\*.dll.config" target="..\lib\netstandard20\Flee.NetStandard20.dll" />
+    <file src="src\Flee.Net45\bin\Release\Flee.Net45.dll" exclude="bin\Release\*.dll.config" target="lib\net45\Flee.Net45.dll" />
+    <file src="src\Flee.NetStandard20\bin\Release\netstandard2.0\Flee.NetStandard20.dll" exclude="bin\Release\*.dll.config" target="lib\netstandard20\Flee.NetStandard20.dll" />
   </files>
 </package>
