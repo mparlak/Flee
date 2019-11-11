@@ -182,7 +182,7 @@ namespace Flee.InternalTypes
             _myTarget = target;
         }
 
-        public void ComputeScore(Type[] argTypes)
+        public void ComputeScore(Type[] argTypes, Type ownerType)
         {
             ParameterInfo[] @params = _myTarget.GetParameters();
 
@@ -192,7 +192,7 @@ namespace Flee.InternalTypes
             }
             else if (@params.Length == 1 && argTypes.Length == 0) // extension method without parameter support -> prefer members
             {
-                _myScore = 0.1F;
+                _myScore = ownerType == null ? 0.1F : 0.1F + this.ComputeScoreInternal(@params, new [] { ownerType });
             }
             else if (IsParamArray == true)
             {

@@ -1,13 +1,22 @@
-﻿using Flee.PublicTypes;
-using Flee.Test.ExpressionTests.ExtensionMethodTestData;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace Flee.Test.ExpressionTests
+﻿namespace Flee.OtherTests
 {
+    using Flee.PublicTypes;
+    using Flee.Test.Infrastructure;
+    using Flee.OtherTests.ExtensionMethodTestData;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     /// <summary>The extension method test.</summary>
     [TestClass]
-    public class ExtensionMethodTest : Core
+    public class ExtensionMethodTest : ExpressionTests
     {
+        [TestMethod]
+        public void TestExtensionMethodAsMethodCallOnOwner()
+        {
+            var result = GetExpressionContext().CompileDynamic("SayHello(Sub)").Evaluate();
+            Assert.AreEqual("Hello as well, SubWorld", result);
+        }
+
         [TestMethod]
         public void TestExtensionMethodCallOnOwner()
         {
@@ -19,7 +28,7 @@ namespace Flee.Test.ExpressionTests
         public void TestExtensionMethodCallOnProperty()
         {
             var result = GetExpressionContext().CompileDynamic("Sub.SayHello()").Evaluate();
-            Assert.AreEqual("Hello SubWorld", result);
+            Assert.AreEqual("Hello as well, SubWorld", result);
         }
 
         [TestMethod]
@@ -47,7 +56,7 @@ namespace Flee.Test.ExpressionTests
         public void TestExtensionMethodCallOnPropertyWithArguments()
         {
             var result = GetExpressionContext().CompileDynamic("Sub.SayHello(\"!!!\")").Evaluate();
-            Assert.AreEqual("Hello SubWorld!!!", result);
+            Assert.AreEqual("Hello as well, SubWorld!!!", result);
         }
 
         [TestMethod]
@@ -61,7 +70,7 @@ namespace Flee.Test.ExpressionTests
         public void TestExtensionMethodCallOnPropertyWithArgumentsOnOverload()
         {
             var result = GetExpressionContext().CompileDynamic("Sub.SayHello(\"!!!\")").Evaluate();
-            Assert.AreEqual("Hello SubWorld!!!", result);
+            Assert.AreEqual("Hello as well, SubWorld!!!", result);
         }
 
         private static ExpressionContext GetExpressionContext()

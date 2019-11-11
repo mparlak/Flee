@@ -145,10 +145,12 @@ namespace Flee.ExpressionElements.MemberElements
         /// <param name="argTypes"></param>
         private void ResolveOverloads(CustomMethodInfo[] infos, MemberElement previous, Type[] argTypes)
         {
+            var ownerType = previous?.ResultType ?? MyContext?.ExpressionOwner.GetType();
+
             // Compute a score for each candidate
             foreach (CustomMethodInfo cmi in infos)
             {
-                cmi.ComputeScore(argTypes);
+                cmi.ComputeScore(argTypes, ownerType);
             }
 
             // Sort array from best to worst matches
