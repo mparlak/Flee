@@ -28,8 +28,11 @@ namespace Flee.PublicTypes
     public sealed class ExpressionCompileException : Exception
     {
         private readonly CompileExceptionReason _myReason;
-        internal ExpressionCompileException(string message, CompileExceptionReason reason) : base(message)
+        public object[] Arguments { get; }
+
+        internal ExpressionCompileException(string message, CompileExceptionReason reason, object[] arguments) : base(message)
         {
+            Arguments = arguments;
             _myReason = reason;
         }
 
@@ -67,5 +70,17 @@ namespace Flee.PublicTypes
         }
 
         public CompileExceptionReason Reason => _myReason;
+    }
+
+    /// <summary>
+    /// Exception, which occured during expression evaluation.
+    /// </summary>
+    [Serializable]
+    public sealed class ExpressionEvaluationException : Exception
+    {
+
+        public ExpressionEvaluationException(string message) : base(message)
+        {
+        }
     }
 }

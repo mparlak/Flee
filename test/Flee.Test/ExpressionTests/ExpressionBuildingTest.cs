@@ -77,5 +77,23 @@ namespace ExpressionBuildingTest
 
             Assert.IsTrue((bool)e1.Evaluate());
         }
+
+        [TestMethod, ExpectedException(typeof(ExpressionEvaluationException))]
+        public void RuntimeErrorCheck_DivisionByZero()
+        {
+            ExpressionContext context = new ExpressionContext();
+            IDynamicExpression e1 = context.CompileDynamic("1 = 1/0");
+            e1.Evaluate();
+        }
+
+        [TestMethod, ExpectedException(typeof(ExpressionEvaluationException))]
+        public void RuntimeErrorCheck_ParsingInvalidDate()
+        {
+            ExpressionContext context = new ExpressionContext();
+            context.Variables.Add("a", "stringObject");
+            context.Imports.AddType(typeof(DateTime));
+            IDynamicExpression e1 = context.CompileDynamic("Parse(a)");
+            e1.Evaluate();
+        }
     }
 }

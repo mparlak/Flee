@@ -36,7 +36,7 @@ namespace Flee.ExpressionElements.Base
             string messageTemplate = FleeResourceManager.Instance.GetCompileErrorString(messageKey);
             string message = string.Format(messageTemplate, arguments);
             message = string.Concat(this.Name, ": ", message);
-            throw new ExpressionCompileException(message, reason);
+            throw new ExpressionCompileException(message, reason, arguments);
         }
 
         protected void ThrowAmbiguousCallException(Type leftType, Type rightType, object operation)

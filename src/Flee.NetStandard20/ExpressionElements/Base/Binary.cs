@@ -97,9 +97,10 @@ namespace Flee.ExpressionElements.Base
             }
             else
             {
+                return leftMethod;
                 // Ambiguous call
-                base.ThrowAmbiguousCallException(leftType, rightType, operation);
-                return null;
+                //base.ThrowAmbiguousCallException(leftType, rightType, operation);
+                //return null;
             }
         }
 

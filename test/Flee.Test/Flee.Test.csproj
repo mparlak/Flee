@@ -76,8 +76,12 @@
     <Content Include="TestScripts\CheckedTests.txt" />
     <Content Include="TestScripts\IndividualTests.xml" />
     <Content Include="TestScripts\InvalidExpressions.txt" />
-    <Content Include="TestScripts\FailingLongScriptWithManyFunctions.js" />
-    <Content Include="TestScripts\LongScriptWithManyFunctions.js" />
+    <Content Include="TestScripts\FailingLongScriptWithManyFunctions.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestScripts\LongScriptWithManyFunctions.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestScripts\LongBranchLogicalTest.txt" />
     <Content Include="TestScripts\SimpleCalcEngineTests.txt" />
     <Content Include="TestScripts\ValidCasts.txt" />

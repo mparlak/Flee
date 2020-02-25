@@ -366,18 +366,18 @@ namespace Flee.Resources {
                 return ResourceManager.GetString("TypeNotArrayAndHasNoIndexerOfType", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to Could find not function &apos;{0}({1})&apos;.
+        ///   Looks up a localized string similar to Could not find function &apos;{0}({1})&apos;.
         /// </summary>
         internal static string UndefinedFunction {
             get {
                 return ResourceManager.GetString("UndefinedFunction", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to Could find not function &apos;{0}({1})&apos; on type &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Could not find function &apos;{0}({1})&apos; on type &apos;{2}&apos;.
         /// </summary>
         internal static string UndefinedFunctionOnType {
             get {
