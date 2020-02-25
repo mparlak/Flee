@@ -19,7 +19,7 @@ namespace Flee.ExpressionElements
         {
             TypeCode tc = Type.GetTypeCode(childType);
 
-            MethodInfo mi = Utility.GetSimpleOverloadedOperator("UnaryNegation", childType, childType);
+            MethodInfo mi = Utility.GetSimpleOverloadedOperator("UnaryNegation", childType, null);
             if ((mi != null))
             {
                 return mi.ReturnType;
@@ -45,7 +45,7 @@ namespace Flee.ExpressionElements
             MyChild.Emit(ilg, services);
             ImplicitConverter.EmitImplicitConvert(MyChild.ResultType, resultType, ilg);
 
-            MethodInfo mi = Utility.GetSimpleOverloadedOperator("UnaryNegation", resultType, resultType);
+            MethodInfo mi = Utility.GetSimpleOverloadedOperator("UnaryNegation", resultType, null);
 
             if (mi == null)
             {
