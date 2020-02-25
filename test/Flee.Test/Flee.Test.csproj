@@ -62,6 +62,9 @@
     <Compile Include="ExpressionTests\ExpressionBuildingTest.cs" />
     <Compile Include="ExpressionTests\Benchmarks.cs" />
     <Compile Include="ExpressionTests\Core.cs" />
+    <Compile Include="ExtensionMethodTests\ExtensionMethodTest.cs" />
+    <Compile Include="ExtensionMethodTests\TestData.cs" />
+    <Compile Include="ExtensionMethodTests\TestDataExtensions.cs" />
     <Compile Include="Infrastructure\Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
