@@ -80,31 +80,6 @@ namespace Flee.ExpressionElements.LogicalBitwise
             // We have to do a 'fake' emit so we can get the positions of the labels
             ShortCircuitInfo info = new ShortCircuitInfo();
 
-            if (ilg.IsTemp)
-            {
-                // already a temp, don't need another
-                this.EmitLogical(ilg, info, services);
-                // adjust the length with nop to get proper
-                // offsets for caller.
-                info.Branches.ComputeBranches(ilg);
-                return;
-            }
-
-            // Create a temporary IL generator
-            FleeILGenerator ilgTemp = this.CreateTempFleeILGenerator(ilg);
-
-            // We have to make sure that the label count for the temp FleeILGenerator matches our real FleeILGenerator
-            Utility.SyncFleeILGeneratorLabels(ilg, ilgTemp);
-            // Do the fake emit
-            this.EmitLogical(ilgTemp, info, services);
-
-            // Clear everything except the label positions
-            info.ClearTempState();
-
-            info.Branches.ComputeBranches(ilgTemp);
-
-            Utility.SyncFleeILGeneratorLabels(ilgTemp, ilg);
-
             // Do the real emit
             this.EmitLogical(ilg, info, services);
         }
@@ -123,7 +98,7 @@ namespace Flee.ExpressionElements.LogicalBitwise
         private void EmitLogical(FleeILGenerator ilg, ShortCircuitInfo info, IServiceProvider services)
         {
             // We always have an end label
-            info.Branches.GetLabel(OurEndLabelKey, ilg);
+            Label endLabel = ilg.DefineLabel();
 
             // Populate our data structures
             this.PopulateData(info);
@@ -135,18 +110,15 @@ namespace Flee.ExpressionElements.LogicalBitwise
             ExpressionElement terminalOperand = (ExpressionElement)info.Operands.Pop();
             // Emit it
             EmitOperand(terminalOperand, info, ilg, services);
-            // And jump to the end
-            Label endLabel = info.Branches.FindLabel(OurEndLabelKey);
 
             // only 1-3 opcodes, always a short branch
-            ilg.Emit(OpCodes.Br_S, endLabel);
+            ilg.EmitBranch(endLabel);
 
             // Emit our true/false terminals
             EmitTerminals(info, ilg, endLabel);
 
             // Mark the end
             ilg.MarkLabel(endLabel);
-            MarkBranchTarget(info, endLabel, ilg);
         }
 
         /// <summary>
@@ -177,60 +149,13 @@ namespace Flee.ExpressionElements.LogicalBitwise
 
         private static void EmitBranch(AndOrElement op, FleeILGenerator ilg, Label target, ShortCircuitInfo info)
         {
-            if (ilg.IsTemp == true)
-            {
-                info.Branches.AddBranch(ilg, target);
-
-                // Temp mode; just emit a short branch and return
-                OpCode shortBranch = GetBranchOpcode(op, false);
-                ilg.Emit(shortBranch, target);
-
-                return;
-            }
-
-            // Emit the proper branch opcode
-
-            // Determine if it is a long branch
-            bool longBranch = info.Branches.IsLongBranch(ilg, target);
-
             // Get the branch opcode
-            OpCode brOpcode = GetBranchOpcode(op, longBranch);
-
-            // Emit the branch
-            ilg.Emit(brOpcode, target);
-        }
-
-        /// <summary>
-        /// Emit a short/long branch for an And/Or element
-        /// </summary>
-        /// <param name="op"></param>
-        /// <param name="longBranch"></param>
-        /// <returns></returns>
-        private static OpCode GetBranchOpcode(AndOrElement op, bool longBranch)
-        {
             if (op._myOperation == AndOrOperation.And)
-            {
-                if (longBranch == true)
-                {
-                    return OpCodes.Brfalse;
-                }
-                else
-                {
-                    return OpCodes.Brfalse_S;
-                }
-            }
+                ilg.EmitBranchFalse(target);
             else
-            {
-                if (longBranch == true)
-                {
-                    return OpCodes.Brtrue;
-                }
-                else
-                {
-                    return OpCodes.Brtrue_S;
-                }
-            }
+                ilg.EmitBranchTrue(target);
         }
+
 
         /// <summary>
         /// Get the label for a short-circuit
@@ -330,14 +255,11 @@ namespace Flee.ExpressionElements.LogicalBitwise
         private static void EmitOperand(ExpressionElement operand, ShortCircuitInfo info, FleeILGenerator ilg, IServiceProvider services)
         {
             // Is this operand the target of a label?
-            if (info.Branches.HasLabel(operand) == true)
+            if (info.HasLabel(operand) == true)
             {
                 // Yes, so mark it
-                Label leftLabel = info.Branches.FindLabel(operand);
+                Label leftLabel = info.FindLabel(operand);
                 ilg.MarkLabel(leftLabel);
-
-                // Note the label's position
-                MarkBranchTarget(info, leftLabel, ilg);
             }
 
             // Emit the operand
@@ -353,18 +275,17 @@ namespace Flee.ExpressionElements.LogicalBitwise
         private static void EmitTerminals(ShortCircuitInfo info, FleeILGenerator ilg, Label endLabel)
         {
             // Emit the false case if it was used
-            if (info.Branches.HasLabel(OurFalseTerminalKey) == true)
+            if (info.HasLabel(OurFalseTerminalKey) == true)
             {
-                Label falseLabel = info.Branches.FindLabel(OurFalseTerminalKey);
+                Label falseLabel = info.FindLabel(OurFalseTerminalKey);
 
                 // Mark the label and note its position
                 ilg.MarkLabel(falseLabel);
-                MarkBranchTarget(info, falseLabel, ilg);
 
                 ilg.Emit(OpCodes.Ldc_I4_0);
 
                 // If we also have a true terminal, then skip over it
-                if (info.Branches.HasLabel(OurTrueTerminalKey) == true)
+                if (info.HasLabel(OurTrueTerminalKey) == true)
                 {
                     // only 1-3 opcodes, always a short branch
                     ilg.Emit(OpCodes.Br_S, endLabel);
@@ -372,35 +293,23 @@ namespace Flee.ExpressionElements.LogicalBitwise
             }
 
             // Emit the true case if it was used
-            if (info.Branches.HasLabel(OurTrueTerminalKey) == true)
+            if (info.HasLabel(OurTrueTerminalKey) == true)
             {
-                Label trueLabel = info.Branches.FindLabel(OurTrueTerminalKey);
+                Label trueLabel = info.FindLabel(OurTrueTerminalKey);
 
                 // Mark the label and note its position
                 ilg.MarkLabel(trueLabel);
-                MarkBranchTarget(info, trueLabel, ilg);
 
                 ilg.Emit(OpCodes.Ldc_I4_1);
             }
         }
 
-        /// <summary>
-        /// Note a label's position if we are in mark mode
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="target"></param>
-        /// <param name="ilg"></param>
-        private static void MarkBranchTarget(ShortCircuitInfo info, Label target, FleeILGenerator ilg)
-        {
-            if (ilg.IsTemp == true)
-            {
-                info.Branches.MarkLabel(ilg, target);
-            }
-        }
 
         private static Label GetLabel(object key, FleeILGenerator ilg, ShortCircuitInfo info)
         {
-            return info.Branches.GetLabel(key, ilg);
+            if (info.HasLabel(key))
+                return info.FindLabel(key);
+            return info.AddLabel(key, ilg.DefineLabel());
         }
 
         /// <summary>

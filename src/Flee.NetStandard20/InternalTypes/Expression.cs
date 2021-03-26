@@ -87,13 +87,20 @@ namespace Flee.InternalTypes
 
             // Emit the IL
             rootElement.Emit(ilg, services);
+            if (ilg.NeedsSecondPass())
+            {
+                // second pass required due to long branches.
+                dm = this.CreateDynamicMethod();
+                ilg.PrepareSecondPass(dm.GetILGenerator());
+                rootElement.Emit(ilg, services);
+            }
 
             ilg.ValidateLength();
 
             // Emit to an assembly if required
             if (options.EmitToAssembly == true)
             {
-                EmitToAssembly(rootElement, services);
+                EmitToAssembly(ilg, rootElement, services);
             }
 
             Type delegateType = typeof(ExpressionEvaluator<>).MakeGenericType(typeof(T));
@@ -124,7 +131,14 @@ namespace Flee.InternalTypes
             dest.AddService(typeof(ExpressionInfo), _myInfo);
         }
 
-        private static void EmitToAssembly(ExpressionElement rootElement, IServiceContainer services)
+        /// <summary>
+        /// Emit to an assembly. We've already computed long branches at this point,
+        /// so we emit as a second pass
+        /// </summary>
+        /// <param name="ilg"></param>
+        /// <param name="rootElement"></param>
+        /// <param name="services"></param>
+        private static void EmitToAssembly(FleeILGenerator ilg, ExpressionElement rootElement, IServiceContainer services)
         {
             AssemblyName assemblyName = new AssemblyName(EmitAssemblyName);
 
@@ -135,7 +149,8 @@ namespace Flee.InternalTypes
 
             MethodBuilder mb = moduleBuilder.DefineGlobalMethod("Evaluate", MethodAttributes.Public | MethodAttributes.Static, typeof(T), new Type[] {
             typeof(object),typeof(ExpressionContext),typeof(VariableCollection)});
-            FleeILGenerator ilg = new FleeILGenerator(mb.GetILGenerator());
+            // already emitted once for local use,
+            ilg.PrepareSecondPass(mb.GetILGenerator());
 
             rootElement.Emit(ilg, services);
 

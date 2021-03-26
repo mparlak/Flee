@@ -81,9 +81,9 @@
     <Content Include="TestScripts\ValidExpressions.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Flee.Net45\Flee.Net45.csproj">
-      <Project>{658c0ed4-404a-48ec-96ff-d22c3c12ac39}</Project>
-      <Name>Flee.Net45</Name>
+    <ProjectReference Include="..\..\src\Flee.NetStandard20\Flee.NetStandard20.csproj">
+      <Project>{8c600bab-128a-4792-8260-469b2dad6681}</Project>
+      <Name>Flee.NetStandard20</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

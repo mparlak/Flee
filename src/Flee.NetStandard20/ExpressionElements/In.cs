@@ -121,29 +121,8 @@ namespace Flee.ExpressionElements
             }
             else
             {
-                BranchManager bm = new BranchManager();
-                bm.GetLabel("endLabel", ilg);
-                bm.GetLabel("trueTerminal", ilg);
-
-                if (ilg.IsTemp)
-                {
-                    // no real emit needed.
-                    this.EmitListIn(ilg, services, bm);
-                    // expand IL space to fit long branches
-                    bm.ComputeBranches(ilg);
-                    return;
-                }
-
-                // Do a fake emit to get branch positions
-                FleeILGenerator ilgTemp = this.CreateTempFleeILGenerator(ilg);
-                Utility.SyncFleeILGeneratorLabels(ilg, ilgTemp);
-
-                this.EmitListIn(ilgTemp, services, bm);
-
-                bm.ComputeBranches(ilgTemp);
-
                 // Do the real emit
-                this.EmitListIn(ilg, services, bm);
+                this.EmitListIn(ilg, services);
             }
         }
 
@@ -175,11 +154,11 @@ namespace Flee.ExpressionElements
             return MyTargetCollectionType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
         }
 
-        private void EmitListIn(FleeILGenerator ilg, IServiceProvider services, BranchManager bm)
+        private void EmitListIn(FleeILGenerator ilg, IServiceProvider services)
         {
             CompareElement ce = new CompareElement();
-            Label endLabel = bm.FindLabel("endLabel");
-            Label trueTerminal = bm.FindLabel("trueTerminal");
+            Label endLabel = ilg.DefineLabel();
+            Label trueTerminal = ilg.DefineLabel();
 
             // Cache the operand since we will be comparing against it a lot
             LocalBuilder lb = ilg.DeclareLocal(MyOperand.ResultType);
@@ -197,36 +176,22 @@ namespace Flee.ExpressionElements
                 ce.Initialize(targetShim, argumentElement, LogicalCompareOperation.Equal);
                 ce.Emit(ilg, services);
 
-                EmitBranchToTrueTerminal(ilg, trueTerminal, bm);
+                EmitBranchToTrueTerminal(ilg, trueTerminal);
             }
 
             ilg.Emit(OpCodes.Ldc_I4_0);
             ilg.Emit(OpCodes.Br_S, endLabel);
 
-            bm.MarkLabel(ilg, trueTerminal);
             ilg.MarkLabel(trueTerminal);
 
             ilg.Emit(OpCodes.Ldc_I4_1);
 
-            bm.MarkLabel(ilg, endLabel);
             ilg.MarkLabel(endLabel);
         }
 
-        private static void EmitBranchToTrueTerminal(FleeILGenerator ilg, Label trueTerminal, BranchManager bm)
+        private static void EmitBranchToTrueTerminal(FleeILGenerator ilg, Label trueTerminal)
         {
-            if (ilg.IsTemp == true)
-            {
-                bm.AddBranch(ilg, trueTerminal);
-                ilg.Emit(OpCodes.Brtrue_S, trueTerminal);
-            }
-            else if (bm.IsLongBranch(ilg, trueTerminal) == false)
-            {
-                ilg.Emit(OpCodes.Brtrue_S, trueTerminal);
-            }
-            else
-            {
-                ilg.Emit(OpCodes.Brtrue, trueTerminal);
-            }
+            ilg.EmitBranchTrue(trueTerminal);
         }
 
         public override System.Type ResultType => typeof(bool);
