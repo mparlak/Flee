@@ -53,6 +53,9 @@ namespace Flee.ExpressionElements
             {
                 // If this is a fake emit, then do a fake emit and return
                 this.EmitConditional(ilg, services, bm);
+                // add the long branch offsets so our length
+                // is accurate.
+                bm.ComputeBranches(ilg);
                 return;
             }
 
@@ -62,7 +65,7 @@ namespace Flee.ExpressionElements
             // Emit fake conditional to get branch target positions
             this.EmitConditional(ilgTemp, services, bm);
 
-            bm.ComputeBranches();
+            bm.ComputeBranches(ilgTemp);
 
             // Emit real conditional now that we have the branch target locations
             this.EmitConditional(ilg, services, bm);

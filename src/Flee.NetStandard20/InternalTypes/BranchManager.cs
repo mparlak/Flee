@@ -19,10 +19,12 @@ namespace Flee.InternalTypes
         }
 
         /// <summary>
-        /// Determine whether to use short or long branches
+        /// Determine whether to use short or long branches.
+        /// This advances the ilg offset with No-op to adjust
+        /// for the long branches needed.
         /// </summary>
         /// <remarks></remarks>
-        public void ComputeBranches()
+        public void ComputeBranches(FleeILGenerator ilg)
         {
             List<BranchInfo> betweenBranches = new List<BranchInfo>();
 
@@ -53,6 +55,14 @@ namespace Flee.InternalTypes
 
                 // Keep a tally of the number of long branches
                 longBranchCount += Convert.ToInt32(bi.IsLongBranch);
+            }
+            //
+            // emit the Nop so our IL generator is the correct size.
+            while (longBranchCount-- > 0)
+            {
+                ilg.Emit(OpCodes.Nop);
+                ilg.Emit(OpCodes.Nop);
+                ilg.Emit(OpCodes.Nop);
             }
         }
 

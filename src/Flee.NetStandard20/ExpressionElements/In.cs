@@ -118,7 +118,6 @@ namespace Flee.ExpressionElements
             if ((MyTargetCollectionType != null))
             {
                 this.EmitCollectionIn(ilg, services);
-
             }
             else
             {
@@ -126,13 +125,22 @@ namespace Flee.ExpressionElements
                 bm.GetLabel("endLabel", ilg);
                 bm.GetLabel("trueTerminal", ilg);
 
+                if (ilg.IsTemp)
+                {
+                    // no real emit needed.
+                    this.EmitListIn(ilg, services, bm);
+                    // expand IL space to fit long branches
+                    bm.ComputeBranches(ilg);
+                    return;
+                }
+
                 // Do a fake emit to get branch positions
                 FleeILGenerator ilgTemp = this.CreateTempFleeILGenerator(ilg);
                 Utility.SyncFleeILGeneratorLabels(ilg, ilgTemp);
 
                 this.EmitListIn(ilgTemp, services, bm);
 
-                bm.ComputeBranches();
+                bm.ComputeBranches(ilgTemp);
 
                 // Do the real emit
                 this.EmitListIn(ilg, services, bm);

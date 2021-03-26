@@ -79,6 +79,17 @@ namespace Flee.ExpressionElements.LogicalBitwise
         {
             // We have to do a 'fake' emit so we can get the positions of the labels
             ShortCircuitInfo info = new ShortCircuitInfo();
+
+            if (ilg.IsTemp)
+            {
+                // already a temp, don't need another
+                this.EmitLogical(ilg, info, services);
+                // adjust the length with nop to get proper
+                // offsets for caller.
+                info.Branches.ComputeBranches(ilg);
+                return;
+            }
+
             // Create a temporary IL generator
             FleeILGenerator ilgTemp = this.CreateTempFleeILGenerator(ilg);
 
@@ -90,7 +101,7 @@ namespace Flee.ExpressionElements.LogicalBitwise
             // Clear everything except the label positions
             info.ClearTempState();
 
-            info.Branches.ComputeBranches();
+            info.Branches.ComputeBranches(ilgTemp);
 
             Utility.SyncFleeILGeneratorLabels(ilgTemp, ilg);
 
@@ -126,6 +137,8 @@ namespace Flee.ExpressionElements.LogicalBitwise
             EmitOperand(terminalOperand, info, ilg, services);
             // And jump to the end
             Label endLabel = info.Branches.FindLabel(OurEndLabelKey);
+
+            // only 1-3 opcodes, always a short branch
             ilg.Emit(OpCodes.Br_S, endLabel);
 
             // Emit our true/false terminals
@@ -133,6 +146,7 @@ namespace Flee.ExpressionElements.LogicalBitwise
 
             // Mark the end
             ilg.MarkLabel(endLabel);
+            MarkBranchTarget(info, endLabel, ilg);
         }
 
         /// <summary>
@@ -352,6 +366,7 @@ namespace Flee.ExpressionElements.LogicalBitwise
                 // If we also have a true terminal, then skip over it
                 if (info.Branches.HasLabel(OurTrueTerminalKey) == true)
                 {
+                    // only 1-3 opcodes, always a short branch
                     ilg.Emit(OpCodes.Br_S, endLabel);
                 }
             }

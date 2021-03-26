@@ -126,13 +126,22 @@ namespace Flee.ExpressionElements
                 bm.GetLabel("endLabel", ilg);
                 bm.GetLabel("trueTerminal", ilg);
 
+                if (ilg.IsTemp)
+                {
+                    // no real emit needed.
+                    this.EmitListIn(ilg, services, bm);
+                    // expand IL space to fit long branches
+                    bm.ComputeBranches(ilg);
+                    return;
+                }
+
                 // Do a fake emit to get branch positions
                 FleeILGenerator ilgTemp = this.CreateTempFleeILGenerator(ilg);
                 Utility.SyncFleeILGeneratorLabels(ilg, ilgTemp);
 
                 this.EmitListIn(ilgTemp, services, bm);
 
-                bm.ComputeBranches();
+                bm.ComputeBranches(ilg);
 
                 // Do the real emit
                 this.EmitListIn(ilg, services, bm);
@@ -193,6 +202,7 @@ namespace Flee.ExpressionElements
             }
 
             ilg.Emit(OpCodes.Ldc_I4_0);
+            // only 1 opcode between here and endLabel, so always short
             ilg.Emit(OpCodes.Br_S, endLabel);
 
             bm.MarkLabel(ilg, trueTerminal);
