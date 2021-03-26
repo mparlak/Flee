@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flee" Version="1.2.1" />
+    <ProjectReference Include="..\..\src\Flee.NetStandard20\Flee.NetStandard20.csproj" />
   </ItemGroup>
 
 </Project>

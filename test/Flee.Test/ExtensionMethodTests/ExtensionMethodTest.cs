@@ -65,6 +65,23 @@
             Assert.AreEqual("Hello SubWorld!!!", result);
         }
 
+        /// <summary>
+        /// check that methods are not ambiguous.
+        /// </summary>
+        [TestMethod]
+        public void TestExtensionMethodMatchArguments()
+        {
+            var result = GetExpressionContext().CompileDynamic("MatchParams(1, 2.3f, 2.3)").Evaluate();
+            Assert.AreEqual("FFD", result);
+            result = GetExpressionContext().CompileDynamic("MatchParams(3.4,4.4,2.3)").Evaluate();
+            Assert.AreEqual("DDD", result);
+            result = GetExpressionContext().CompileDynamic("MatchParams(1,2,3)").Evaluate();
+            Assert.AreEqual("III", result);
+            result = GetExpressionContext().CompileDynamic("MatchParams(1u,2,3)").Evaluate();
+            Assert.AreEqual("UII", result);
+        }
+
+
         private static ExpressionContext GetExpressionContext()
         {
             var expressionOwner = new TestData { Id = "World" };
