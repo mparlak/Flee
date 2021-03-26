@@ -69,7 +69,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestScripts\NestedConditionals.js" />
     <Content Include="TestScripts\readme.txt" />
     <Content Include="TestScripts\CheckedTests.txt" />
     <Content Include="TestScripts\IndividualTests.xml" />
