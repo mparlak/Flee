@@ -15,6 +15,8 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
      */
     internal class RecursiveDescentParser : Parser
     {
+        private int _stackdepth = 0;
+
         public RecursiveDescentParser(TextReader input) : base(input)
         {
         }
@@ -79,6 +81,7 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
 
         protected override Node ParseStart()
         {
+            _stackdepth = 0;
             var node = ParsePattern(GetStartPattern());
             var token = PeekToken(0);
             if (token != null)
@@ -94,22 +97,37 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
             return node;
         }
 
+
         private Node ParsePattern(ProductionPattern pattern)
         {
-            var defaultAlt = pattern.DefaultAlternative;
-            for (int i = 0; i < pattern.Count; i++)
+            _stackdepth++;
+
+            if (_stackdepth > 200)
             {
-                var alt = pattern[i];
-                if (defaultAlt != alt && IsNext(alt))
+                throw new System.StackOverflowException();
+            }
+
+            try
+            {
+                var defaultAlt = pattern.DefaultAlternative;
+                for (int i = 0; i < pattern.Count; i++)
                 {
-                    return ParseAlternative(alt);
+                    var alt = pattern[i];
+                    if (defaultAlt != alt && IsNext(alt))
+                    {
+                        return ParseAlternative(alt);
+                    }
                 }
+                if (defaultAlt == null || !IsNext(defaultAlt))
+                {
+                    ThrowParseException(FindUnion(pattern));
+                }
+                return ParseAlternative(defaultAlt);
             }
-            if (defaultAlt == null || !IsNext(defaultAlt))
+            finally
             {
-                ThrowParseException(FindUnion(pattern));
+                _stackdepth--;
             }
-            return ParseAlternative(defaultAlt);
         }
 
         private Node ParseAlternative(ProductionPatternAlternative alt)
@@ -536,6 +554,7 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
 
             return result;
         }
+
 
         private void ThrowParseException(LookAheadSet set)
         {

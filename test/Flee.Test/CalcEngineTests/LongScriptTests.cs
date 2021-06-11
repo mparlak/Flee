@@ -13,15 +13,32 @@ namespace Flee.Test.CalcEngineTests
     public class LongScriptTests
     {
         private SimpleCalcEngine _myEngine;
+
+
+		public class TestFunction
+        {
+			static public Decimal Price(String s)
+            {
+				return 1.0m;
+            }
+
+			static public Decimal First(params object[] args)
+            {
+				return (Decimal)args[0];
+            }
+        }
+
         public LongScriptTests()
         {
             var engine = new SimpleCalcEngine();
             var context = new ExpressionContext();
-            context.Imports.AddType(typeof(Math));
+			context.Imports.AddType(typeof(TestFunction));
+			context.Imports.AddType(typeof(Math));
 			//            context.Imports.AddType(typeof(Math), "math");
 
 			//' add convert methods e.g. .ToInt64, .ToString, .ToDateTime...  https://msdn.microsoft.com/en-us/library/system.convert.aspx?f=255&MSPPError=-2147217396 
 			context.Imports.AddType(typeof(Convert));
+			context.Imports.AddType(typeof(string));
 
 			engine.Context = context;
             _myEngine = engine;
@@ -117,6 +134,64 @@ AND (5*6+13-6*9-3+1+2+3+4+5+6+7+8 = 5+6+7+8+9+1+2+3+4+5+6+1+2+3+4+9-48 OR 6+5+2+
 		}
 
 
+static string crashscript= @"
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 10.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 20.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 30.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 40.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 50.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 60.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 70.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 80.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,
+if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 90.99, ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 + 1,";
+
+
+
+		[Test]
+		public void CrashTest()
+		{
+			_myEngine.Context.Options.RealLiteralDataType = RealLiteralDataType.Decimal;
+			var e = _myEngine.Context.CompileDynamic(crashscript);
+			var result = e.Evaluate();
+		}
+
+
+		[Test]
+		public void SeparatorExpressionParse()
+		{
+			var context = new ExpressionContext();
+			context.Options.ParseCulture = new System.Globalization.CultureInfo("de-DE");
+			context.ParserOptions.RecreateParser();
+			var script = @"If(2,57 < 2,7; 3,57; 1000)";
+			var expr = context.CompileDynamic(script);
+			var result = expr.Evaluate();
+
+			Assert.AreEqual(3.57d, result);
+		}
+
+
+		[Test]
+		public void StringTest()
+        {
+			var e = _myEngine.Context.CompileDynamic("\"TEST\".Substring(0,2)");
+			var result = e.Evaluate();
+
+			Assert.AreEqual("TE", result);
+		}
+
+
+		[Test]
+		public void DivideByZero()
+        {
+			var context = new ExpressionContext();
+			context.Options.IntegersAsDoubles = true;
+
+			var script = @"1 / (1/0)";
+			var expr = context.CompileDynamic(script);
+			var result = expr.Evaluate();
+
+			Assert.AreEqual(0d, result);
+		}
 
 	}
 }
