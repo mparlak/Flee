@@ -121,13 +121,13 @@ namespace Flee.Parsing
 
             customPattern = new RealPattern(Convert.ToInt32(ExpressionConstants.REAL), "REAL", TokenPattern.PatternType.REGEXP, "\\d{0}\\{1}\\d+([e][+-]\\d{{1,3}})?(d|f|m)?");
             customPattern.Initialize(Convert.ToInt32(ExpressionConstants.REAL), "REAL", TokenPattern.PatternType.REGEXP, "\\d{0}\\{1}\\d+([e][+-]\\d{{1,3}})?(d|f|m)?", _myContext);
-            AddPattern(customPattern);
+            AddPattern(customPattern, false);
 
             pattern = new TokenPattern(Convert.ToInt32(ExpressionConstants.STRING_LITERAL), "STRING_LITERAL", TokenPattern.PatternType.REGEXP, "\"([^\"\\r\\n\\\\]|\\\\u[0-9a-f]{4}|\\\\[\\\\\"'trn])*\"");
-            AddPattern(pattern);
+            AddPattern(pattern, false);
 
             pattern = new TokenPattern(Convert.ToInt32(ExpressionConstants.CHAR_LITERAL), "CHAR_LITERAL", TokenPattern.PatternType.REGEXP, "'([^'\\r\\n\\\\]|\\\\u[0-9a-f]{4}|\\\\[\\\\\"'trn])'");
-            AddPattern(pattern);
+            AddPattern(pattern, false);
 
             pattern = new TokenPattern(Convert.ToInt32(ExpressionConstants.TRUE), "TRUE", TokenPattern.PatternType.STRING, "True");
             AddPattern(pattern);
@@ -145,7 +145,7 @@ namespace Flee.Parsing
             AddPattern(pattern);
 
             pattern = new TokenPattern(Convert.ToInt32(ExpressionConstants.TIMESPAN), "TIMESPAN", TokenPattern.PatternType.REGEXP, "##(\\d+\\.)?\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,7})?)?#");
-            AddPattern(pattern);
+            AddPattern(pattern, false);
 
             pattern = new TokenPattern(Convert.ToInt32(ExpressionConstants.DATETIME), "DATETIME", TokenPattern.PatternType.REGEXP, "#[^#]+#");
             AddPattern(pattern);

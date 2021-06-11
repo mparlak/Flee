@@ -9,17 +9,21 @@ namespace Flee.InternalTypes
 {
     internal class FleeILGenerator
     {
-        private readonly ILGenerator _myIlGenerator;
+        private ILGenerator _myIlGenerator;
         private int _myLength;
         private int _myLabelCount;
         private readonly Dictionary<Type, LocalBuilder> _localBuilderTemp;
-        private readonly bool _myIsTemp;
-        public FleeILGenerator(ILGenerator ilg, int startLength = 0, bool isTemp = false)
+        private int _myPass;
+        private int _brContext;
+        private BranchManager _bm;
+
+        public FleeILGenerator(ILGenerator ilg)
         {
             _myIlGenerator = ilg;
             _localBuilderTemp = new Dictionary<Type, LocalBuilder>();
-            _myIsTemp = isTemp;
-            _myLength = startLength;
+            _myLength = 0;
+            _myPass = 1;
+            _bm = new BranchManager();
         }
 
         public int GetTempLocalIndex(Type localType)
@@ -33,6 +37,30 @@ namespace Flee.InternalTypes
             }
 
             return local.LocalIndex;
+        }
+
+        /// <summary>
+        /// after first pass, check for long branches.
+        /// If any, we need to generate again.
+        /// </summary>
+        /// <returns></returns>
+        public bool NeedsSecondPass()
+        {
+            return _bm.HasLongBranches();
+        }
+
+        /// <summary>
+        /// need a new ILGenerator for 2nd pass. This can also
+        /// get called for a 3rd pass when emitting to assembly.
+        /// </summary>
+        /// <param name="ilg"></param>
+        public void PrepareSecondPass(ILGenerator ilg)
+        {
+            _bm.ComputeBranches();
+            _localBuilderTemp.Clear();
+            _myIlGenerator = ilg;
+            _myLength = 0;
+            _myPass++;
         }
 
         public void Emit(OpCode op)
@@ -119,16 +147,71 @@ namespace Flee.InternalTypes
             _myIlGenerator.Emit(op, arg);
         }
 
+        public void EmitBranch(Label arg)
+        {
+            if (_myPass == 1)
+            {
+                _bm.AddBranch(this, arg);
+                Emit(OpCodes.Br_S, arg);
+            }
+            else if (_bm.IsLongBranch(this) == false)
+            {
+                Emit(OpCodes.Br_S, arg);
+            }
+            else
+            {
+                Emit(OpCodes.Br, arg);
+            }
+        }
+
+        public void EmitBranchFalse(Label arg)
+        {
+            if (_myPass == 1)
+            {
+                _bm.AddBranch(this, arg);
+                Emit(OpCodes.Brfalse_S, arg);
+            }
+            else if (_bm.IsLongBranch(this) == false)
+            {
+                Emit(OpCodes.Brfalse_S, arg);
+            }
+            else
+            {
+                Emit(OpCodes.Brfalse, arg);
+            }
+        }
+
+        public void EmitBranchTrue(Label arg)
+        {
+            if (_myPass == 1)
+            {
+                _bm.AddBranch(this, arg);
+                Emit(OpCodes.Brtrue_S, arg);
+            }
+            else if (_bm.IsLongBranch(this) == false)
+            {
+                Emit(OpCodes.Brtrue_S, arg);
+            }
+            else
+            {
+                Emit(OpCodes.Brtrue, arg);
+            }
+        }
+
         public void MarkLabel(Label lbl)
         {
             _myIlGenerator.MarkLabel(lbl);
+            _bm.MarkLabel(this, lbl);
         }
+
 
         public Label DefineLabel()
         {
             _myLabelCount += 1;
-            return _myIlGenerator.DefineLabel();
+            var label = _myIlGenerator.DefineLabel();
+            return label;
         }
+
 
         public LocalBuilder DeclareLocal(Type localType)
         {
@@ -185,7 +268,5 @@ namespace Flee.InternalTypes
         public int LabelCount => _myLabelCount;
 
         private int ILGeneratorLength => Utility.GetILGeneratorLength(_myIlGenerator);
-
-        public bool IsTemp => _myIsTemp;
     }
 }

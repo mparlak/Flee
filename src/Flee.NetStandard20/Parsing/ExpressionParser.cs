@@ -12,7 +12,7 @@ namespace Flee.Parsing
     /// <summary>
     /// A token stream parser.
     /// </summary>
-    internal class ExpressionParser : RecursiveDescentParser
+    internal class ExpressionParser : StackParser
     {
         private enum SynteticPatterns
         {

@@ -42,10 +42,14 @@ namespace Flee.InternalTypes
                         break;
                 }
             }
+            else if (index < 256)
+            {
+                ilg.Emit(OpCodes.Stloc_S, Convert.ToByte(index));
+            }
             else
             {
-                Debug.Assert(index < 256, "local index too large");
-                ilg.Emit(OpCodes.Stloc_S, Convert.ToByte(index));
+                Debug.Assert(index < 65535, "local index too large");
+                ilg.Emit(OpCodes.Stloc, unchecked((short)Convert.ToUInt16(index)));
             }
         }
 
@@ -71,10 +75,14 @@ namespace Flee.InternalTypes
                         break;
                 }
             }
+            else if (index < 256)
+            {
+                ilg.Emit(OpCodes.Ldloc_S, Convert.ToByte(index));
+            }
             else
             {
-                Debug.Assert(index < 256, "local index too large");
-                ilg.Emit(OpCodes.Ldloc_S, Convert.ToByte(index));
+                Debug.Assert(index < 65535, "local index too large");
+                ilg.Emit(OpCodes.Ldloc, unchecked((short)Convert.ToUInt16(index)));
             }
         }
 
@@ -179,13 +187,7 @@ namespace Flee.InternalTypes
             }
         }
 
-        public static void SyncFleeILGeneratorLabels(FleeILGenerator source, FleeILGenerator target)
-        {
-            while (source.LabelCount != target.LabelCount)
-            {
-                target.DefineLabel();
-            }
-        }
+ 
 
         public static bool IsIntegralType(Type t)
         {

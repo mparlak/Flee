@@ -63,6 +63,9 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
              * ambiguities that cannot be resolved.
              */
             INHERENT_AMBIGUITY
+
+
+
         }
 
         private readonly ErrorType _type;
