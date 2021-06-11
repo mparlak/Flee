@@ -151,8 +151,16 @@ if(ceiling(First(6.29,if(6.39<100.01,6.39*0.66,6.39*.25)))-.01 = 90.99, ceiling(
 		public void CrashTest()
 		{
 			_myEngine.Context.Options.RealLiteralDataType = RealLiteralDataType.Decimal;
-			var e = _myEngine.Context.CompileDynamic(crashscript);
-			var result = e.Evaluate();
+			bool gotex = false;
+			try
+			{
+				var e = _myEngine.Context.CompileDynamic(crashscript);
+			}
+			catch (ExpressionCompileException e)
+            {
+				gotex = true;
+            }
+			Assert.IsTrue(gotex);
 		}
 
 

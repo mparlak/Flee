@@ -591,7 +591,7 @@ AND NOT
             context.Variables.ResolveVariableValue += Variables_ResolveVariableValue;
             Stopwatch sw;
 
-            /*
+            
             sw = new Stopwatch();
             sw.Start();
 
@@ -603,7 +603,7 @@ AND NOT
             sw.Stop();
             this.PrintSpeedMessage("Compile Big", iterations, sw);
             Assert.Less(sw.ElapsedMilliseconds, expectedTime, "Test time above expected value");
-            */
+            
 
             iterations = 100;
             expectedTime = 100;

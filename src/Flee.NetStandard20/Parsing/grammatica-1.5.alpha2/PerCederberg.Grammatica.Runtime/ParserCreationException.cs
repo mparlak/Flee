@@ -62,7 +62,7 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
              * of production patterns (i.e. the grammar) contains
              * ambiguities that cannot be resolved.
              */
-            INHERENT_AMBIGUITY,
+            INHERENT_AMBIGUITY
 
 
 
