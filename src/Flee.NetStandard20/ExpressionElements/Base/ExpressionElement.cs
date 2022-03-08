@@ -44,11 +44,6 @@ namespace Flee.ExpressionElements.Base
             this.ThrowCompileException(CompileErrorResourceKeys.AmbiguousOverloadedOperator, CompileExceptionReason.AmbiguousMatch, leftType.Name, rightType.Name, operation);
         }
 
-        protected FleeILGenerator CreateTempFleeILGenerator(FleeILGenerator ilgCurrent)
-        {
-            DynamicMethod dm = new DynamicMethod("temp", typeof(Int32), null, this.GetType());
-            return new FleeILGenerator(dm.GetILGenerator(), ilgCurrent.Length, true);
-        }
 
         protected string Name
         {

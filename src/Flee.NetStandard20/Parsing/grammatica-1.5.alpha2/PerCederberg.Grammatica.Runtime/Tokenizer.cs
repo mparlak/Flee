@@ -86,7 +86,10 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
             return _buffer.ColumnNumber;
         }
 
-        public void AddPattern(TokenPattern pattern)
+        /**
+         * nfa - true to attempt as an nfa pattern for regexp. This handles most things except the complex repeates, ie {1,4}
+         */
+        public void AddPattern(TokenPattern pattern, bool nfa=true)
         {
             switch (pattern.Type)
             {
@@ -105,11 +108,18 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
                     }
                     break;
                 case TokenPattern.PatternType.REGEXP:
-                    try
+                    if (nfa)
                     {
-                        _nfaMatcher.AddPattern(pattern);
+                        try
+                        {
+                            _nfaMatcher.AddPattern(pattern);
+                        }
+                        catch (Exception)
+                        {
+                            nfa = false;
+                        }
                     }
-                    catch (Exception)
+                    if (!nfa)
                     {
                         try
                         {
@@ -124,6 +134,7 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
                                 e.Message);
                         }
                     }
+
                     break;
                 default:
                     throw new ParserCreationException(

@@ -9,32 +9,51 @@ namespace Flee.InternalTypes
     [Obsolete("Manages branch information and allows us to determine if we should emit a short or long branch")]
     internal class BranchManager
     {
-        private IList<BranchInfo> MyBranchInfos;
+        private readonly IList<BranchInfo> MyBranchInfos;
 
-        private IDictionary<object, Label> MyKeyLabelMap;
         public BranchManager()
         {
             MyBranchInfos = new List<BranchInfo>();
-            MyKeyLabelMap = new Dictionary<object, Label>();
         }
 
         /// <summary>
-        /// Determine whether to use short or long branches
+        /// check if any long branches exist
         /// </summary>
-        /// <remarks></remarks>
-        public void ComputeBranches()
+        /// <returns></returns>
+        public bool HasLongBranches()
         {
-            List<BranchInfo> betweenBranches = new List<BranchInfo>();
-
             foreach (BranchInfo bi in MyBranchInfos)
             {
-                betweenBranches.Clear();
+                if (bi.ComputeIsLongBranch()) return true;
+            }
+            return false;
+        }
 
-                // Find any branches between the start and end locations of this branch
-                this.FindBetweenBranches(bi, betweenBranches);
+        /// <summary>
+        /// Determine whether to use short or long branches.
+        /// This advances the ilg offset with No-op to adjust
+        /// for the long branches needed.
+        /// </summary>
+        /// <remarks></remarks>
+        public bool ComputeBranches()
+        {
+            //
+            // we need to iterate in reverse order of the
+            // starting location, as branch between our 
+            // branch could push our branch to a long branch.
+            //
+            for( var idx=MyBranchInfos.Count-1; idx >= 0; idx--)
+            {
+                var bi = MyBranchInfos[idx];
 
-                // Count the number of long branches in the above set
-                int longBranchesBetween = this.CountLongBranches(betweenBranches);
+                // count long branches between
+                int longBranchesBetween = 0;
+                for( var ii=idx+1; ii < MyBranchInfos.Count; ii++)
+                {
+                    var bi2 = MyBranchInfos[ii];
+                    if (bi2.IsBetween(bi) && bi2.ComputeIsLongBranch())
+                        ++longBranchesBetween;
+                }
 
                 // Adjust the branch as necessary
                 bi.AdjustForLongBranchesBetween(longBranchesBetween);
@@ -54,62 +73,31 @@ namespace Flee.InternalTypes
                 // Keep a tally of the number of long branches
                 longBranchCount += Convert.ToInt32(bi.IsLongBranch);
             }
+
+            return  (longBranchCount > 0);
         }
 
-        /// <summary>
-        /// Count the number of long branches in a set
-        /// </summary>
-        /// <param name="dest"></param>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        private int CountLongBranches(ICollection<BranchInfo> dest)
-        {
-            int count = 0;
-
-            foreach (BranchInfo bi in dest)
-            {
-                count += Convert.ToInt32(bi.ComputeIsLongBranch());
-            }
-
-            return count;
-        }
-
-        /// <summary>
-        /// Find all the branches between the start and end locations of a target branch
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="dest"></param>
-        /// <remarks></remarks>
-        private void FindBetweenBranches(BranchInfo target, ICollection<BranchInfo> dest)
-        {
-            foreach (BranchInfo bi in MyBranchInfos)
-            {
-                if (bi.IsBetween(target) == true)
-                {
-                    dest.Add(bi);
-                }
-            }
-        }
 
         /// <summary>
         /// Determine if a branch from a point to a label will be long
         /// </summary>
         /// <param name="ilg"></param>
-        /// <param name="target"></param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public bool IsLongBranch(FleeILGenerator ilg, Label target)
+        public bool IsLongBranch(FleeILGenerator ilg)
         {
             ILLocation startLoc = new ILLocation(ilg.Length);
-            BranchInfo bi = new BranchInfo(startLoc, target);
 
-            int index = MyBranchInfos.IndexOf(bi);
-            if (index > -1 && index < MyBranchInfos.Count)
+            foreach (var bi in MyBranchInfos)
             {
-                bi = MyBranchInfos[index];
+                if (bi.Equals(startLoc))
+                    return bi.IsLongBranch;
             }
 
-            return bi.IsLongBranch;
+            // we don't really know since this branch didn't exist.
+            // we could throw an exceptio but 
+            // do a long branch to be safe.
+            return true;
         }
 
         /// <summary>
@@ -123,48 +111,10 @@ namespace Flee.InternalTypes
             ILLocation startLoc = new ILLocation(ilg.Length);
 
             BranchInfo bi = new BranchInfo(startLoc, target);
+            // branches will be sorted in order
             MyBranchInfos.Add(bi);
         }
 
-        /// <summary>
-        /// Get a label by a key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public Label FindLabel(object key)
-        {
-            return MyKeyLabelMap[key];
-        }
-
-        /// <summary>
-        /// Get a label by a key.  Create the label if it is not present.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="ilg"></param>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public Label GetLabel(object key, FleeILGenerator ilg)
-        {
-            Label lbl;
-            if (MyKeyLabelMap.TryGetValue(key, out lbl) == false)
-            {
-                lbl = ilg.DefineLabel();
-                MyKeyLabelMap.Add(key, lbl);
-            }
-            return lbl;
-        }
-
-        /// <summary>
-        /// Determines if we have a label for a key
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        /// <remarks></remarks>
-        public bool HasLabel(object key)
-        {
-            return MyKeyLabelMap.ContainsKey(key);
-        }
 
         /// <summary>
         /// Set the position for a label
@@ -267,12 +217,13 @@ namespace Flee.InternalTypes
     }
 
     [Obsolete("Represents a branch from a start location to an end location")]
-    internal class BranchInfo : IEquatable<BranchInfo>
+    internal class BranchInfo 
     {
         private readonly ILLocation _myStart;
         private readonly ILLocation _myEnd;
         private Label _myLabel;
         private bool _myIsLongBranch;
+
         public BranchInfo(ILLocation startLocation, Label endLabel)
         {
             _myStart = startLocation;
@@ -283,6 +234,9 @@ namespace Flee.InternalTypes
         public void AdjustForLongBranches(int longBranchCount)
         {
             _myStart.AdjustForLongBranch(longBranchCount);
+            // end not necessarily needed once we determine
+            // if this is long, but keep it accurate anyway.
+            _myEnd.AdjustForLongBranch(longBranchCount);
         }
 
         public void BakeIsLongBranch()
@@ -313,13 +267,16 @@ namespace Flee.InternalTypes
             }
         }
 
-        public bool Equals1(BranchInfo other)
+        /// <summary>
+        /// We only need to compare the start point. Can only have a single
+        /// brach from the exact address, so if label doesn't match we have
+        /// bigger problems.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(ILLocation start)
         {
-            return _myStart.Equals1(other._myStart) && _myLabel.Equals(other._myLabel);
-        }
-        bool System.IEquatable<BranchInfo>.Equals(BranchInfo other)
-        {
-            return Equals1(other);
+            return _myStart.Equals1(start);
         }
 
         public override string ToString()

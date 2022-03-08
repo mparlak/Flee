@@ -192,13 +192,13 @@ namespace Flee.InternalTypes
             }
             else if (@params.Length == 1 && argTypes.Length == 0)//extension method without parameter support -> prefer members
             {
-               _myScore = 0.1F;
+                _myScore = 0.1F;
             }
             else if (IsParamArray == true)
             {
                 _myScore = this.ComputeScoreForParamArray(@params, argTypes);
             }
-            else if(IsExtensionMethod == true)
+            else if (IsExtensionMethod == true)
             {
                 _myScore = this.ComputeScoreExtensionMethodInternal(@params, argTypes);
             }
@@ -221,7 +221,7 @@ namespace Flee.InternalTypes
 
             for (int i = 0; i <= argTypes.Length - 1; i++)
             {
-                sum += ImplicitConverter.GetImplicitConvertScore(argTypes[i], parameters[i+1].ParameterType);
+                sum += ImplicitConverter.GetImplicitConvertScore(argTypes[i], parameters[i + 1].ParameterType);
             }
 
             return sum;
@@ -238,7 +238,7 @@ namespace Flee.InternalTypes
             // Our score is the average of the scores of each parameter.  The lower the score, the better the match.
             int sum = ComputeSum(parameters, argTypes);
 
-            return sum / argTypes.Length;
+            return (float)sum / (float)argTypes.Length;
         }
 
         private static int ComputeSum(ParameterInfo[] parameters, Type[] argTypes)
@@ -321,7 +321,7 @@ namespace Flee.InternalTypes
             if (lastParam.IsDefined(typeof(ParamArrayAttribute), false) == false)
             {
                 //Extension method support
-                if(parameters.Length == argTypes.Length + 1)
+                if (parameters.Length == argTypes.Length + 1)
                 {
                     IsExtensionMethod = true;
                     return AreValidExtensionMethodArgumentsForParameters(argTypes, parameters, previous, context);
@@ -418,7 +418,7 @@ namespace Flee.InternalTypes
             //Match if every given argument is implicitly convertible to the method's corresponding parameter
             for (int i = 0; i <= argTypes.Length - 1; i++)
             {
-                if (ImplicitConverter.EmitImplicitConvert(argTypes[i], parameters[i+1].ParameterType, null) == false)
+                if (ImplicitConverter.EmitImplicitConvert(argTypes[i], parameters[i + 1].ParameterType, null) == false)
                 {
                     return false;
                 }
@@ -463,19 +463,35 @@ namespace Flee.InternalTypes
 
         public Stack Operands;
         public Stack Operators;
+        private Dictionary<object, Label> Labels;
 
-        public BranchManager Branches;
         public ShortCircuitInfo()
         {
             this.Operands = new Stack();
             this.Operators = new Stack();
-            this.Branches = new BranchManager();
+            this.Labels = new Dictionary<object, Label>();
         }
 
         public void ClearTempState()
         {
             this.Operands.Clear();
             this.Operators.Clear();
+        }
+
+        public Label AddLabel(object key, Label lbl)
+        {
+            Labels.Add(key, lbl);
+            return lbl;
+        }
+
+        public bool HasLabel(object key)
+        {
+            return Labels.ContainsKey(key);
+        }
+
+        public Label FindLabel(object key)
+        {
+            return Labels[key];
         }
     }
 

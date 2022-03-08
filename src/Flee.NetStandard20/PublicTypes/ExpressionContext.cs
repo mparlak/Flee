@@ -96,14 +96,14 @@ namespace Flee.PublicTypes
         {
             ExpressionContext context = (ExpressionContext)this.MemberwiseClone();
             context._myProperties = _myProperties.Clone();
-            context._myProperties.SetValue("Options", this.Options.Clone());
-            context._myProperties.SetValue("ParserOptions", this.ParserOptions.Clone());
-            context._myProperties.SetValue("Imports", this.Imports.Clone());
+            context._myProperties.SetValue("Options", context.Options.Clone());
+            context._myProperties.SetValue("ParserOptions", context.ParserOptions.Clone());
+            context._myProperties.SetValue("Imports", context.Imports.Clone());
             context.Imports.SetContext(context);
 
             if (cloneVariables == true)
             {
-                context._myVariables = new VariableCollection(this);
+                context._myVariables = new VariableCollection(context);
                 this.Variables.Copy(context._myVariables);
             }
 

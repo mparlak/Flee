@@ -1,37 +1,74 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime;
 
 namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
 {
     /**
-     * A recursive descent parser. This parser handles LL(n) grammars,
+     * based on recursive descent parser, this implementation removes recursion
+     * and uses a stack instead. This parser handles LL(n) grammars,
      * selecting the appropriate pattern to parse based on the next few
-     * tokens. The parser is more efficient the fewer look-ahead tokens
-     * that is has to consider.
+     * tokens. 
      */
-    internal class RecursiveDescentParser : Parser
+    internal class StackParser : Parser
     {
-        private int _stackdepth = 0;
+        /**
+         * this is the parser state that is pushed onto the stack, simulating
+         * the variable state needed in recursive version. Some variables
+         * substitute for execution position, such as validnext, so patterns
+         * are processed in the proper order.
+         */
+        internal class ParseState
+        {
+            /**
+             * pattern for this state
+             */
+            internal ProductionPattern pattern;
+            /**
+             * index of the alt pattern we are currently checking
+             */
+            internal int altindex;
 
-        public RecursiveDescentParser(TextReader input) : base(input)
+            /**
+             * index into the list of elements for the alt pattern
+             */
+            internal int elementindex;
+
+            /**
+             * index to the token we are processing.
+             */
+            internal int tokenindex;
+
+            /**
+             * The node for current state
+             */
+            internal Node node;
+
+            /**
+             * true if we already checked IsNext on the current pattern
+             * so we should not call it again
+             */
+            internal bool validnext;
+
+        }
+
+
+        public StackParser(TextReader input) : base(input)
         {
         }
 
-        public RecursiveDescentParser(TextReader input, Analyzer analyzer)
+        public StackParser(TextReader input, Analyzer analyzer)
             : base(input, analyzer)
         {
         }
 
-        public RecursiveDescentParser(Tokenizer tokenizer)
+        public StackParser(Tokenizer tokenizer)
             : base(tokenizer)
         {
         }
 
-        public RecursiveDescentParser(Tokenizer tokenizer,
+        public StackParser(Tokenizer tokenizer,
                                       Analyzer analyzer)
             : base(tokenizer, analyzer)
         {
@@ -81,8 +118,9 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
 
         protected override Node ParseStart()
         {
-            _stackdepth = 0;
-            var node = ParsePattern(GetStartPattern());
+            var node = ParsePatterns(GetStartPattern());
+
+
             var token = PeekToken(0);
             if (token != null)
             {
@@ -98,62 +136,129 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
         }
 
 
-        private Node ParsePattern(ProductionPattern pattern)
+
+        private ParseState NewState(ProductionPattern pattern)
         {
-            _stackdepth++;
-
-            if (_stackdepth > 200)
+            return new ParseState()
             {
-                throw new System.StackOverflowException();
-            }
-
-            try
-            {
-                var defaultAlt = pattern.DefaultAlternative;
-                for (int i = 0; i < pattern.Count; i++)
-                {
-                    var alt = pattern[i];
-                    if (defaultAlt != alt && IsNext(alt))
-                    {
-                        return ParseAlternative(alt);
-                    }
-                }
-                if (defaultAlt == null || !IsNext(defaultAlt))
-                {
-                    ThrowParseException(FindUnion(pattern));
-                }
-                return ParseAlternative(defaultAlt);
-            }
-            finally
-            {
-                _stackdepth--;
-            }
+                pattern = pattern,
+                altindex = 0,
+                elementindex = 0,
+                tokenindex = 0,
+                node = null,
+                validnext = false
+            };
         }
 
-        private Node ParseAlternative(ProductionPatternAlternative alt)
+        /// <summary>
+        /// parse patterns using a stack. The stack is local to this method, since the parser
+        /// is a singleton and may be parsing expressions from multiple threads, so cannot
+        /// use the object to store our stack.
+        /// </summary>
+        /// <param name="start"></param>
+        /// <returns></returns>
+        private Node ParsePatterns(ProductionPattern start)
         {
-            var node = NewProduction(alt.Pattern);
-            EnterNode(node);
-            for (int i = 0; i < alt.Count; i++)
+            Stack<ParseState> _stack = new Stack<ParseState>();
+            _stack.Push(NewState(start));
+
+            while (_stack.Count > 0)
+            {
+                ParseState state = _stack.Peek();
+                ProductionPattern pattern = state.pattern;
+                var defaultAlt = pattern.DefaultAlternative;
+                ProductionPattern nextpattern = null;
+                while (state.altindex < pattern.Count)
+                {
+                    var alt = pattern[state.altindex];
+                    if (state.validnext || (defaultAlt != alt && IsNext(alt)))
+                    {
+                        state.validnext = true;
+                        nextpattern = ParseAlternative(state, alt);
+                        break;
+                    }
+                    else
+                    {
+                        state.altindex++;
+                        state.validnext = false;
+                    }
+                }
+
+                // check if completed pass through alt patterns. try default
+                if (state.altindex >= pattern.Count)
+                {
+                    if (!state.validnext && (defaultAlt == null || !IsNext(defaultAlt)))
+                    {
+                        ThrowParseException(FindUnion(pattern));
+                    }
+                    else
+                    {
+                        state.validnext = true;
+                        nextpattern = ParseAlternative(state, defaultAlt);
+                    }
+                }
+                
+                if (nextpattern != null)
+                {
+                    _stack.Push(NewState(nextpattern));
+                }
+
+                // we finished current pattern, so back up to previous state.
+                else
+                {
+                    // if we have a node set, add it to the parent 
+                    var child = state.node;
+                    _stack.Pop();
+                    if (_stack.Count == 0)
+                    {
+                        // back to top, can return our result, which is top node
+                        return child;
+                    }
+                    state = _stack.Peek();
+                    AddNode((Production)state.node, child);
+                }
+            }
+
+            // should never get here, but must show we return something.
+            return null;
+        }
+
+        /**
+         * return the pattern to push onto stack and process next.
+         */
+        private ProductionPattern ParseAlternative(ParseState state, ProductionPatternAlternative alt)
+        {
+            if (state.node == null)
+            {
+                state.node = NewProduction(alt.Pattern);
+                state.elementindex = 0;
+                EnterNode(state.node);
+            }
+            while (state.elementindex < alt.Count)
             {
                 try
                 {
-                    ParseElement(node, alt[i]);
+                    var pattern = ParseElement(state, alt[state.elementindex]);
+                    if (pattern == null)
+                        state.elementindex++;
+                    else
+                        return pattern;
                 }
                 catch (ParseException e)
                 {
                     AddError(e, true);
                     NextToken();
-                    i--;
                 }
             }
-            return ExitNode(node);
+
+            state.node = ExitNode(state.node);
+            return null;
         }
 
-        private void ParseElement(Production node,
+        private ProductionPattern ParseElement(ParseState state,
                                   ProductionPatternElement elem)
         {
-            for (int i = 0; i < elem.MaxCount; i++)
+            for (int i = state.tokenindex; i < elem.MaxCount; i++)
             {
                 if (i < elem.MinCount || IsNext(elem))
                 {
@@ -162,12 +267,14 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
                     {
                         child = NextToken(elem.Id);
                         EnterNode(child);
-                        AddNode(node, ExitNode(child));
+                        AddNode((Production)state.node, ExitNode(child));
                     }
                     else
                     {
-                        child = ParsePattern(GetPattern(elem.Id));
-                        AddNode(node, child);
+                        // continue from next token when we return
+                        state.tokenindex = i + 1;
+                        // return to start processing the new pattern at this state
+                        return GetPattern(elem.Id); ;
                     }
                 }
                 else
@@ -175,6 +282,10 @@ namespace Flee.Parsing.grammatica_1._5.alpha2.PerCederberg.Grammatica.Runtime
                     break;
                 }
             }
+            //
+            // we completed processing this element
+            state.tokenindex = 0;
+            return null;
         }
 
         private bool IsNext(ProductionPattern pattern)
