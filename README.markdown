@@ -1,4 +1,4 @@
-# Flee (Supports .Net Core 2.0)
+# Flee (Supports Net6.0, Net5.0, Netstandard2.1, Netstandard2.0)
  Fast Lightweight Expression Evaluator.
  Convert this project vb.net to c#.
   
@@ -39,7 +39,7 @@ Or via the .NET Core command line interface:
 
 | Name  | NuGet |
 | :---  | :---  |
-| [Flee](https://www.nuget.org/packages/Flee)                       | [![Flee](https://img.shields.io/badge/nuget-v1.2.2-blue.svg)](https://www.nuget.org/packages/Flee)                 
+| [Flee](https://www.nuget.org/packages/Flee)                       | [![Flee](https://img.shields.io/badge/nuget-v2.0.0-blue.svg)](https://www.nuget.org/packages/Flee)                 
 
 ## More information
 * [Examples](https://github.com/mparlak/Flee/wiki/Examples) to learn how to create and evaluate expressions.

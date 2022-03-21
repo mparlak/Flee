@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Flee.PublicTypes;
 using NUnit.Framework;
 
@@ -583,7 +579,7 @@ AND NOT
         [Test(Description = "Compile complicated expressions")]
         public void ProfileCompilationTime()
         {
-            int expectedTime = 1000;
+            int expectedTime = 2000;
             int iterations = 10;
 
             var context = new ExpressionContext();
@@ -597,8 +593,7 @@ AND NOT
 
             for (int i = 0; i < iterations - 1; i++)
             {
-                IDynamicExpression e = this.CreateDynamicExpression(BigExpression, context);
-
+                CreateDynamicExpression(BigExpression, context);
             }
             sw.Stop();
             this.PrintSpeedMessage("Compile Big", iterations, sw);

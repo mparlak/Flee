@@ -259,3 +259,8 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?

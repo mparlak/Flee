@@ -1,13 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Flee.PublicTypes;
+using NUnit.Framework;
 
 namespace ExpressionBuildingTest
 {
-    [TestClass]
+    [TestFixture]
     public class ExpressionBuildingTest
     {
-        [TestMethod]
+        [Test]
         public void ExpressionsAsVariables()
         {
             ExpressionContext context = new ExpressionContext();
@@ -31,7 +31,7 @@ namespace ExpressionBuildingTest
         }
 
 
-        [TestMethod]
+        [Test]
         public void Test_IfExpression_enUS()
         {
             ExpressionContext context = new ExpressionContext();
@@ -44,7 +44,7 @@ namespace ExpressionBuildingTest
             Assert.IsTrue((int)e.Evaluate() == resultWhenTrue);
         }
 
-        [TestMethod]
+        [Test]
         public void Test_IfExpression_fiFI()
         {
             ExpressionContext context = new ExpressionContext();
@@ -58,7 +58,7 @@ namespace ExpressionBuildingTest
             Assert.IsTrue((int)e.Evaluate() == resultWhenFalse);
         }
 
-        [TestMethod]
+        [Test]
         public void NullCheck()
         {
             ExpressionContext context = new ExpressionContext();
@@ -68,7 +68,7 @@ namespace ExpressionBuildingTest
             Assert.IsFalse((bool)e1.Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void NullIsNullCheck()
         {
             ExpressionContext context = new ExpressionContext();
@@ -78,7 +78,7 @@ namespace ExpressionBuildingTest
             Assert.IsTrue((bool)e1.Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void CompareLongs()
         {
             // bug #83 test.
@@ -91,7 +91,7 @@ namespace ExpressionBuildingTest
             Assert.AreEqual(1216348165L, e1.Evaluate());
         }
 
-        [TestMethod]
+        [Test]
         public void ArgumentInt_to_DoubleConversion()
         {
             ExpressionContext context = new ExpressionContext();
@@ -102,7 +102,7 @@ namespace ExpressionBuildingTest
         }
 
 
-        [TestMethod]
+        [Test]
         public void IN_OperatorTest()
         {
             ExpressionContext context = new ExpressionContext();
@@ -115,7 +115,5 @@ namespace ExpressionBuildingTest
             e1 = context.CompileGeneric<bool>("\"a\" IN (\"a\",\"b\",\"c\",\"d\") and true and 5 in (2,4,6,7,8,9)");
             Assert.IsFalse(e1.Evaluate());
         }
-
-
     }
 }

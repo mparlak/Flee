@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>Flee</AssemblyName>
+        <AssemblyTitle>Flee</AssemblyTitle>
+        <Description>Flee is Fast Lightweight Expression Evaluator.</Description>
+        <Copyright>Copyright © 2022 Flee Contributors</Copyright>
+        <Authors>Flee Contributors</Authors>
+        <Company>Flee</Company>
+        <Product>Flee</Product>
+        <TargetFrameworks>net6.0;net5.0;netstandard2.1;netstandard2.0</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>2.0.0</PackageVersion>
+        <Title>Flee</Title>
+        <PackageProjectUrl>https://github.com/mparlak/Flee</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/mparlak/Flee</PackageLicenseUrl>
+        <PackageIconUrl>https://github.com/mparlak/Flee</PackageIconUrl>
+        <RepositoryUrl>https://github.com/mparlak/Flee</RepositoryUrl>
+        <PackageTags>flee,expression evaluator,Expression Evaluator for c#</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Resources\DocComments.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Resources\DocComments.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+        <PackageReference Include="System.Reflection" Version="4.3.0" />
+        <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
+        <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.7.0" />
+        <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+    </ItemGroup>
+
+</Project>

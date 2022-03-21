@@ -1,9 +1,7 @@
 ﻿using Flee.CalcEngine.PublicTypes;
 using Flee.PublicTypes;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using System.Collections.Generic;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace Flee.Test.CalcEngineTests
 {
@@ -168,7 +166,7 @@ namespace Flee.Test.CalcEngineTests
             Assert.AreEqual(((100 * 2) + 222) * 2, result);
         }
 
-        [Test, ExpectedException(typeof(CircularReferenceException))]
+        [Test]
         public void Test_Circular_Reference1()
         {
             var ce = new CalculationEngine();
@@ -179,7 +177,7 @@ namespace Flee.Test.CalcEngineTests
             ce.Add("a", "x * 2", context);
             variables.Add("y", 1);
             ce.Add("b", "a + y + b", context);
-            Assert.ThrowsException<CircularReferenceException>(() => { ce.Recalculate("a"); });
+            Assert.Throws<CircularReferenceException>(() => { ce.Recalculate("a"); });
         }
 
         [Test]
