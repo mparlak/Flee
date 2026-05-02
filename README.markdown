@@ -1,4 +1,4 @@
-# Flee (Supports Net6.0, Net5.0, Netstandard2.1, Netstandard2.0)
+# Flee
  Fast Lightweight Expression Evaluator.
  Convert this project vb.net to c#.
   

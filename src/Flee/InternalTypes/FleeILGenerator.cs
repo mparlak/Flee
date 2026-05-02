@@ -264,6 +264,6 @@ namespace Flee.InternalTypes
 
         public int LabelCount => _myLabelCount;
 
-        private int ILGeneratorLength => Utility.GetILGeneratorLength(_myIlGenerator);
+        private int ILGeneratorLength => _myIlGenerator.ILOffset;
     }
 }

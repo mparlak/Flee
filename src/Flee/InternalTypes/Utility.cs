@@ -318,12 +318,6 @@ namespace Flee.InternalTypes
             return null;
         }
 
-        public static int GetILGeneratorLength(ILGenerator ilg)
-        {
-            System.Reflection.FieldInfo fi = typeof(ILGenerator).GetField("m_length", BindingFlags.Instance | BindingFlags.NonPublic);
-            return (int)fi.GetValue(ilg);
-        }
-
         public static bool IsLongBranch(int startPosition, int endPosition)
         {
             return (endPosition - startPosition) > sbyte.MaxValue;
